@@ -1,5 +1,3 @@
-"use client";
-
 import {
   APTOS_CONNECT_ACCOUNT_URL,
   AboutAptosConnect,
@@ -43,6 +41,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
+import google from "@/assets/google.png";
 
 export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const { account, connected, disconnect, wallet } = useWallet();
@@ -99,7 +99,18 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   ) : (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button>Connect a Wallet</Button>
+        <button className="w-full bg-white text-gray-900 font-semibold py-4 border rounded-full mb-8 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center">
+          <div className="flex items-center justify-center w-full">
+            <Image
+              src={google}
+              alt="google"
+              width={24}
+              height={24}
+              className="mr-4"
+            />
+            Continue with Google
+          </div>
+        </button>
       </DialogTrigger>
       <ConnectWalletDialog close={closeDialog} {...walletSortingOptions} />
     </Dialog>
