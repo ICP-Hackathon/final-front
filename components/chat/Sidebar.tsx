@@ -21,16 +21,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [showMoreSaved, setShowMoreSaved] = useState(false);
   const [showMoreHistory, setShowMoreHistory] = useState(false);
 
-  // Mock data - replace with actual data fetching logic
-  const savedAIs: AIItem[] = [
-    { id: "1", name: "NearGuide", imageUrl: "/path-to-image1.jpg" },
-    { id: "2", name: "AI Name", imageUrl: "/path-to-image2.jpg" },
-    { id: "3", name: "AI Name", imageUrl: "/path-to-image3.jpg" },
-    { id: "4", name: "AI Name 4", imageUrl: "/path-to-image4.jpg" },
-  ];
-
   const aiHistory: AIItem[] = [
-    { id: "5", name: "NearGuide", imageUrl: "/path-to-image5.jpg" },
+    { id: "5", name: "AptosGuide", imageUrl: "/path-to-image5.jpg" },
     { id: "6", name: "AI Name", imageUrl: "/path-to-image6.jpg" },
     { id: "7", name: "AI Name", imageUrl: "/path-to-image7.jpg" },
     { id: "8", name: "AI Name 8", imageUrl: "/path-to-image8.jpg" },
@@ -38,9 +30,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const chatHistory = [
     { id: "1", title: "Can you tell me about...", date: "today" },
-    { id: "2", title: 'The term "near and...', date: "today" },
+    { id: "2", title: 'The term "aptos and...', date: "today" },
     { id: "3", title: "Can you advice on...", date: "yesterday" },
-    { id: "4", title: 'The term "near and...', date: "9.12" },
+    { id: "4", title: 'The term "aptos and...', date: "9.12" },
     { id: "5", title: "Can you advice on...", date: "9.8" },
     { id: "6", title: "Can you tell me about...", date: "9.4" },
     { id: "7", title: "Can you tell me about...", date: "9.1" },

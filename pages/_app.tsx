@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
   return (
     <JotaiProvider>
-      <Layout title={pageProps.title || "Near and Dear"}>
+      <Layout title={pageProps.title || "App To S"}>
         <PageComponent {...pageProps} />
       </Layout>
     </JotaiProvider>
