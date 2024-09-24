@@ -3,6 +3,7 @@ import google from "@/assets/google.png";
 import Image from "next/image";
 import Logo from "@/assets/logo_apptos.svg";
 import WalletButton from "@/components/wallet/WalletButton";
+import { WalletSelector } from "@/components/wallet/WalletSelector";
 
 export default function Landing() {
   return (
@@ -35,6 +36,7 @@ export default function Landing() {
           </div>
         </button>
         <WalletButton></WalletButton>
+        <WalletSelector />
         <Link
           href="https://apptosblockblock.gitbook.io/apptos"
           target="_blank"
