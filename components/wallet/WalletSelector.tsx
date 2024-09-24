@@ -71,9 +71,9 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   return connected ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button>
+        <button className="w-full bg-white text-gray-900 font-semibold py-4 border rounded-full mb-8 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center">
           {account?.ansName || truncateAddress(account?.address) || "Unknown"}
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onSelect={copyAddress} className="gap-2">
