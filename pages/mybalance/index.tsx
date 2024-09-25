@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { fetchMyAIs } from "@/utils/api/ai";
 import { AIModel, AIDetailProps } from "@/utils/interface";
+import { useUserStore } from "@/store/userStore";
 
 interface AIBalanceCardProps {
   name: string;
@@ -68,13 +69,12 @@ export const AIBalanceCard: React.FC<AIBalanceCardProps> = ({
 const MyBalancePage = () => {
   const [myAIs, setMyAIs] = useState<AIDetailProps[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const wallet = { address: "test" };
-
+  const { user } = useUserStore();
   useEffect(() => {
     const loadAIModels = async () => {
-      if (wallet.address) {
+      if (user && user.user_address) {
         try {
-          const todayData = await fetchMyAIs(wallet.address);
+          const todayData = await fetchMyAIs(user.user_address);
           setMyAIs(todayData.ais);
           setIsLoading(false);
         } catch (error) {
@@ -84,7 +84,7 @@ const MyBalancePage = () => {
       }
     };
     loadAIModels();
-  }, [wallet.address]);
+  }, [user?.user_address]);
 
   console.log(myAIs);
 
@@ -92,7 +92,7 @@ const MyBalancePage = () => {
     return <div>Loading...</div>;
   }
 
-  if (!wallet.address) {
+  if (!user?.user_address) {
     return <div>Please connect your wallet to view your balance.</div>;
   }
 

@@ -6,6 +6,7 @@ import CategorySelector, {
 } from "@/components/explore/CategorySelector";
 import TodaySection from "@/components/explore/TodaySection";
 import RecentSection from "@/components/explore/RecentSection";
+import { useUserStore } from "@/store/userStore";
 
 const categories: string[] = [
   "All",
@@ -27,13 +28,12 @@ export default function ExplorePage() {
   console.log(todayCards);
   console.log(trendCards);
   const [isLoading, setIsLoading] = useState(true);
-  const wallet = { address: "test" };
-
+  const { user } = useUserStore();
   useEffect(() => {
     const loadAIModels = async () => {
-      if (wallet.address) {
+      if (user && user.user_address) {
         try {
-          const Todaydata = await fetchTodayAIs(wallet?.address);
+          const Todaydata = await fetchTodayAIs(user.user_address);
           setTodayCards(Todaydata.ais);
           setIsLoading(false);
         } catch (error) {
@@ -47,11 +47,11 @@ export default function ExplorePage() {
 
   useEffect(() => {
     const loadAIModels = async () => {
-      if (wallet.address) {
+      if (user && user.user_address) {
         try {
           const Trenddata = await fetchTrendingAIs(
             selectedCategory,
-            wallet.address,
+            user.user_address,
             { offset: 0, limit: 10 }
           );
           setTrendCards(Trenddata.ais);

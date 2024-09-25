@@ -4,6 +4,7 @@ import { Message, ChatResponse } from "@/utils/interface";
 import { createChat, fetchChatHistory, sendMessage } from "@/utils/api/chat";
 import { Send } from "lucide-react";
 import Logo from "@/assets/logo_apptos.svg";
+import { useUserStore } from "@/store/userStore";
 
 const AIChat = () => {
   const router = useRouter();
@@ -12,21 +13,21 @@ const AIChat = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const wallet = { address: "test" };
+  const { user } = useUserStore();
 
   const chatId = useMemo(() => {
-    if (wallet.address && id) {
-      return `${wallet.address}_${id}`;
+    if (user && user.user_address && id) {
+      return `${user.user_address}_${id}`;
     }
     return null;
-  }, [id, wallet.address]);
+  }, [id, user?.user_address]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
-    if (chatId && wallet.address) {
+    if (chatId && user && user.user_address) {
       initializeChat();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,13 +38,16 @@ const AIChat = () => {
   };
 
   const initializeChat = async () => {
-    if (!chatId || !wallet.address) return;
+    if (!chatId || !user?.user_address) return;
 
     try {
-      const chatHistory = await fetchChatHistory(chatId, wallet.address);
+      const chatHistory = await fetchChatHistory(chatId, user?.user_address);
       console.log(chatHistory);
       if (chatHistory.length === 0) {
-        await createChat({ ai_id: id as string, user_address: wallet.address });
+        await createChat({
+          ai_id: id as string,
+          user_address: user?.user_address,
+        });
         // Add initial AI message
         const initialMessage: Message = {
           role: "ai",
@@ -60,7 +64,7 @@ const AIChat = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!input.trim() || !wallet.address || !chatId) return;
+    if (!input.trim() || !user?.user_address || !chatId) return;
 
     const userMessage: Message = {
       role: "user",
@@ -72,7 +76,7 @@ const AIChat = () => {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(chatId, input, wallet.address);
+      const response = await sendMessage(chatId, input, user?.user_address);
       const aiMessage: Message = {
         role: "ai",
         content: response.message,

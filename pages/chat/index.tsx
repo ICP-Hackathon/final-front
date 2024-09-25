@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { fetchUserChats } from "@/utils/api/chat";
 import { addLike, delLike, fetchLikeList } from "@/utils/api/user";
 import { sliceAddress } from "@/utils/lib/address";
+import { useUserStore } from "@/store/userStore";
 
 interface AICardProps {
   aiId: string;
@@ -31,18 +32,17 @@ const AICard: React.FC<AICardProps> = ({
   icon,
 }) => {
   const router = useRouter();
-
-  const wallet = { address: "test" };
+  const { user } = useUserStore();
   const [likes, setLikes] = useState(true);
 
   const addLikes = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      if (wallet.address) {
+      if (user && user.user_address) {
         const userData = {
           //zklogin에서 user_address 받아오기Ï
-          user_address: wallet.address,
+          user_address: user.user_address,
           ai_id: aiId,
         };
         await addLike(userData);
@@ -57,10 +57,10 @@ const AICard: React.FC<AICardProps> = ({
     e.preventDefault();
 
     try {
-      if (wallet.address) {
+      if (user && user.user_address) {
         const userData = {
           //zklogin에서 user_address 받아오기Ï
-          user_address: wallet.address,
+          user_address: user.user_address,
           ai_id: aiId,
         };
         await delLike(userData);
@@ -163,13 +163,12 @@ const ChatPage: React.FC = () => {
   const [likes, setLikes] = useState<AICardProps[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
-  const wallet = { address: "test" };
-
+  const { user } = useUserStore();
   useEffect(() => {
     const loadAIModels = async () => {
-      if (wallet.address) {
+      if (user && user.user_address) {
         try {
-          const ChatData = await fetchUserChats(wallet?.address); // API 호출 경로와 내보내기 확인
+          const ChatData = await fetchUserChats(user.user_address); // API 호출 경로와 내보내기 확인
           const formattedChats = ChatData?.chats?.map((chat: any) => ({
             aiId: chat.ai.id,
             ai_name: chat.ai.name,
@@ -180,7 +179,7 @@ const ChatPage: React.FC = () => {
           console.log(formattedChats);
           setChats(formattedChats || []); // 데이터가 없을 때 빈 배열
 
-          const LikeData = await fetchLikeList(wallet?.address);
+          const LikeData = await fetchLikeList(user.user_address);
           const formattedLikes = LikeData?.ais?.map((like: any) => ({
             aiId: like.id,
             ai_name: like.name,
@@ -197,7 +196,7 @@ const ChatPage: React.FC = () => {
       }
     };
     loadAIModels();
-  }, [wallet]);
+  }, [user?.user_address]);
   return (
     <div className="min-h-[calc(100vh-140px)] bg-white flex flex-col justify-center items-center">
       <div className="w-full max-w-md p-6 text-center">

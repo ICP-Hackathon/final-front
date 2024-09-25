@@ -1,3 +1,4 @@
+import { useUserStore } from "@/store/userStore";
 import { addLike, delLike } from "@/utils/api/user";
 import { Heart, Hexagon } from "lucide-react";
 import { useState } from "react";
@@ -10,17 +11,17 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ name, creator, ai_id, like }) => {
-  const wallet = { address: "test" };
+  const { user } = useUserStore();
   const [likes, setLikes] = useState(like);
 
   const addLikes = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      if (wallet.address) {
+      if (user && user.user_address) {
         const userData = {
           //zklogin에서 user_address 받아오기Ï
-          user_address: wallet.address,
+          user_address: user.user_address,
           ai_id: ai_id,
         };
         await addLike(userData);
@@ -35,10 +36,10 @@ const Card: React.FC<CardProps> = ({ name, creator, ai_id, like }) => {
     e.preventDefault();
 
     try {
-      if (wallet.address) {
+      if (user && user.user_address) {
         const userData = {
           //zklogin에서 user_address 받아오기Ï
-          user_address: wallet.address,
+          user_address: user.user_address,
           ai_id: ai_id,
         };
         await delLike(userData);

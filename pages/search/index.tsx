@@ -11,19 +11,19 @@ export default function SearchPage() {
   const [searchCards, setSearchCards] = useState<CardData[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   console.log(searchCards);
-  useEffect(() => {
-    const loadAIModels = async () => {
-      try {
-        const searchData = await fetchAIs(0, 10);
-        setSearchCards(searchData.ais);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false); // Ensure loading state is updated on error
-      }
-    };
-    loadAIModels();
-  }, []);
+  // useEffect(() => {
+  //   const loadAIModels = async () => {
+  //     try {
+  //       const searchData = await fetchAIs(0, 10);
+  //       setSearchCards(searchData.ais);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setIsLoading(false); // Ensure loading state is updated on error
+  //     }
+  //   };
+  //   loadAIModels();
+  // }, []);
 
   return (
     <div className="flex flex-col h-full">
