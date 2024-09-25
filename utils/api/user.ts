@@ -24,6 +24,7 @@ export async function addUser(userData: {
         gender: userData.gender || "",
         country: userData.country || "",
         interest: userData.interest || "",
+        trial: 10,
       }),
     }
   );
@@ -83,6 +84,7 @@ export async function updateUser(userData: {
   gender?: string;
   country?: string;
   interest?: string;
+  trial?: number;
 }) {
   try {
     const response = await fetch(
@@ -98,6 +100,7 @@ export async function updateUser(userData: {
           gender: userData.gender || "",
           country: userData.country || "",
           interest: userData.interest || "",
+          trial: userData.trial || 0,
         }),
       }
     );

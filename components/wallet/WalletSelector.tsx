@@ -1,5 +1,3 @@
-"use client";
-
 import {
   APTOS_CONNECT_ACCOUNT_URL,
   AboutAptosConnect,
@@ -18,11 +16,9 @@ import {
   ArrowLeft,
   ArrowRight,
   ChevronDown,
-  Copy,
-  LogOut,
-  User,
+  ArrowRightIcon,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -35,71 +31,132 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
+import google from "@/assets/google.png";
+import { useUserStore } from "@/store/userStore";
+import { useRouter } from "next/router";
+import { fetchUser, fetchUserExists } from "@/utils/api/user";
+import { User } from "@/utils/interface";
 
 export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const { account, connected, disconnect, wallet } = useWallet();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { setUser, setUserWallet, user } = useUserStore();
+  const router = useRouter();
 
   const closeDialog = useCallback(() => setIsDialogOpen(false), []);
 
-  const copyAddress = useCallback(async () => {
+  // const copyAddress = useCallback(async () => {
+  //   if (!account?.address) return;
+  //   try {
+  //     await navigator.clipboard.writeText(account.address);
+  //     toast({
+  //       title: "Success",
+  //       description: "Copied wallet address to clipboard.",
+  //     });
+  //   } catch {
+  //     toast({
+  //       variant: "destructive",
+  //       title: "Error",
+  //       description: "Failed to copy wallet address.",
+  //     });
+  //   }
+  // }, [account?.address, toast]);
+
+  useEffect(() => {
+    if (connected && account?.address) {
+      console.log("Wallet connected");
+      console.log("Current wallet: ", account);
+
+      setUserWallet(account);
+
+      const checkAndSetUser = async (address: string) => {
+        try {
+          const userExists = await fetchUserExists(address);
+
+          if (userExists) {
+            const userInfo = await fetchUser(address);
+            const requiredProps: (keyof User)[] = [
+              "user_address",
+              "nickname",
+              "image_url",
+              "gender",
+              "country",
+              "interest",
+            ];
+            const missingProps = requiredProps.filter(
+              (prop) => !(prop in userInfo)
+            );
+
+            if (missingProps.length > 0) {
+              console.warn(
+                `Missing user properties: ${missingProps.join(", ")}`
+              );
+            }
+
+            setUser(userInfo as User);
+          }
+        } catch (error) {
+          console.error("Error checking user or fetching user info:", error);
+        }
+      };
+
+      checkAndSetUser(account.address);
+    } else {
+      console.log("Wallet disconnected");
+    }
+  }, [connected, account, setUserWallet, setUser]);
+
+  const handleConnectedButtonClick = useCallback(async () => {
     if (!account?.address) return;
     try {
-      await navigator.clipboard.writeText(account.address);
-      toast({
-        title: "Success",
-        description: "Copied wallet address to clipboard.",
-      });
-    } catch {
+      const userExists = await fetchUserExists(account.address);
+      if (userExists) {
+        router.push("/explore");
+      } else {
+        router.push("/setprofile");
+      }
+    } catch (error) {
+      console.error("Error checking user existence:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to copy wallet address.",
+        description: "Failed to check user profile. Please try again.",
       });
     }
-  }, [account?.address, toast]);
+  }, [account?.address, router, toast]);
 
   return connected ? (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button>
-          {account?.ansName || truncateAddress(account?.address) || "Unknown"}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onSelect={copyAddress} className="gap-2">
-          <Copy className="h-4 w-4" /> Copy address
-        </DropdownMenuItem>
-        {wallet && isAptosConnectWallet(wallet) && (
-          <DropdownMenuItem asChild>
-            <a
-              href={APTOS_CONNECT_ACCOUNT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex gap-2"
-            >
-              <User className="h-4 w-4" /> Account
-            </a>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem onSelect={disconnect} className="gap-2">
-          <LogOut className="h-4 w-4" /> Disconnect
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button
+      onClick={handleConnectedButtonClick}
+      className="w-full bg-white text-gray-900 font-semibold py-4 px-6 border rounded-full mb-8 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-between"
+    >
+      <div className="flex-grow" />
+      <span className="text-center">
+        {account?.ansName || truncateAddress(account?.address)}
+      </span>
+      <div className="flex-grow flex justify-end">
+        <ArrowRightIcon className="size-5" />
+      </div>
+    </button>
   ) : (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button>Connect a Wallet</Button>
+        <button className="w-full bg-white text-gray-900 font-semibold py-4 border rounded-full mb-8 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center">
+          <div className="flex items-center justify-center w-full">
+            <Image
+              src={google}
+              alt="google"
+              width={24}
+              height={24}
+              className="mr-4"
+            />
+            Continue with Google
+          </div>
+        </button>
       </DialogTrigger>
       <ConnectWalletDialog close={closeDialog} {...walletSortingOptions} />
     </Dialog>

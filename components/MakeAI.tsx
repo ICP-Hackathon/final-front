@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sheet";
 import { Plus, Camera } from "lucide-react";
 import { createAI } from "@/utils/api/ai";
+import { useUserStore } from "@/store/userStore";
 
 type CategoryKey =
   | "education"
@@ -25,9 +26,7 @@ const CreateCustomAISheet = () => {
   const [introductions, setIntroductions] = useState("");
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(false);
-  const wallet = {
-    address: "test",
-  };
+  const { user } = useUserStore();
   //ai 이름 띄어쓰기 변경
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value.replace(/\s+/g, "_");
@@ -39,13 +38,14 @@ const CreateCustomAISheet = () => {
 
     const aiData = {
       name: name,
-      creator_address: wallet.address ?? "",
+      creator_address: user?.user_address ?? "",
       category: selectedCategory,
       introductions: introductions,
       rag_contents: data,
       rag_comments: "CreateAI",
       profile_image_url: "",
       created_at: new Date().toISOString(),
+      examples: "",
     };
 
     try {
