@@ -39,7 +39,7 @@ const Search = ({ setSearch }: SearchProps) => {
         try {
           const data = await fetchSearchAIs(
             debouncedQuery,
-            user?.user_address ? user.user_address : ""
+            user?.user_address ? user.user_address : "",
           );
           if (data && data.ais) {
             setSearch(data.ais);
@@ -49,7 +49,9 @@ const Search = ({ setSearch }: SearchProps) => {
           }
         } catch (error) {
           setError(
-            error instanceof Error ? error.message : "An unknown error occurred"
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred",
           );
         } finally {
           setIsLoading(false); // 로딩 완료 후 로딩 상태 false로 설정

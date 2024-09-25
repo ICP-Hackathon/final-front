@@ -1,6 +1,6 @@
 import { useUserStore } from "@/store/userStore";
 import { addLike, delLike } from "@/utils/api/user";
-import { Heart, Hexagon } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useState } from "react";
 
 interface CardProps {
@@ -20,7 +20,6 @@ const Card: React.FC<CardProps> = ({ name, creator, ai_id, like }) => {
     try {
       if (user && user.user_address) {
         const userData = {
-          //zklogin에서 user_address 받아오기Ï
           user_address: user.user_address,
           ai_id: ai_id,
         };
@@ -38,7 +37,6 @@ const Card: React.FC<CardProps> = ({ name, creator, ai_id, like }) => {
     try {
       if (user && user.user_address) {
         const userData = {
-          //zklogin에서 user_address 받아오기Ï
           user_address: user.user_address,
           ai_id: ai_id,
         };
@@ -54,8 +52,8 @@ const Card: React.FC<CardProps> = ({ name, creator, ai_id, like }) => {
     <div className="p-4 bg-gray-50 rounded-lg shadow-md relative h-[160px] flex flex-col">
       <div className="bg-primary-900 rounded-md size-14 mb-4"></div>
       <div className="flex-grow flex flex-col justify-between">
-        <h3 className="text-sm font-semibold min-h-[20px]">{name}</h3>
-        <p className="text-xs text-gray-500 min-h-[16px]">{creator}</p>
+      <h3 className="text-sm font-semibold min-h-[20px] overflow-hidden text-ellipsis whitespace-nowrap">{name}</h3>
+      <p className="text-xs text-gray-500 min-h-[16px]">{creator}</p>
       </div>
       <button className="absolute top-2 right-2 text-gray-700">
         {likes ? (

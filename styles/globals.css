@@ -96,3 +96,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@media (min-width: 450px) {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #1a202c #e2e8f0;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #e2e8f0;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #1a202c;
+    border-radius: 20px;
+    border: 2px solid #e2e8f0;
+  }
+}

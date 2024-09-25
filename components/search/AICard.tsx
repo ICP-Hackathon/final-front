@@ -3,8 +3,6 @@ import { ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
 import { AICardProps, CardData } from "@/utils/interface";
-import { useState } from "react";
-import { fetchAIDetails } from "@/utils/api/ai";
 import AIDetailsPopup from "../explore/AIDetailsPopup";
 
 export const AICard = ({ item }: AICardProps) => {
@@ -15,10 +13,10 @@ export const AICard = ({ item }: AICardProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border-b border-gray-200">
+    <div className="flex items-center justify-between p-4 border-b border-gray-200 w-full">
       <Dialog>
         <DialogTrigger asChild>
-          <div className="flex items-center flex-grow cursor-pointer">
+          <div className="flex items-center cursor-pointer flex-grow min-w-0 mr-4">
             {item.profile_image_url ? (
               <Image
                 // 수정 필요
@@ -27,18 +25,18 @@ export const AICard = ({ item }: AICardProps) => {
                 alt={item.name}
                 width={50}
                 height={50}
-                className="rounded-full mr-4"
+                className="rounded-full mr-4 flex-shrink-0"
               />
             ) : (
-              <div className="w-[50px] h-[50px] rounded-full bg-primary-900 mr-4 flex items-center justify-center">
+              <div className="w-[50px] h-[50px] rounded-full bg-primary-900 mr-4 flex-shrink-0 flex items-center justify-center">
                 <span className="text-white font-bold text-lg">
                   {item.name.charAt(0).toUpperCase()}
                 </span>
               </div>
             )}
-            <div>
-              <h3 className="font-semibold">{item.name}</h3>
-              <p className="text-sm text-gray-600">{item.creator}</p>
+            <div className="min-w-0 flex-grow">
+              <h3 className="font-semibold truncate">{item.name}</h3>
+              <p className="text-sm text-gray-600 truncate">{item.creator}</p>
             </div>
           </div>
         </DialogTrigger>
@@ -50,7 +48,7 @@ export const AICard = ({ item }: AICardProps) => {
       </Dialog>
 
       <button
-        className="px-4 py-2 bg-primary-50 text-primary-900 rounded-full hover:bg-primary-700 transition-colors flex items-center ml-4"
+        className="px-4 py-2 bg-primary-50 text-primary-900 rounded-full hover:bg-primary-700 transition-colors flex items-center flex-shrink-0 whitespace-nowrap"
         onClick={handleChatClick}
       >
         Chat

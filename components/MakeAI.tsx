@@ -19,7 +19,13 @@ type CategoryKey =
   | "graphics & design"
   | "others";
 
-const CreateCustomAISheet = () => {
+interface CreateCustomAISheetProps {
+  onAICreated: () => void;
+}
+
+const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
+  onAICreated,
+}) => {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [name, setName] = useState("");
@@ -51,6 +57,7 @@ const CreateCustomAISheet = () => {
     try {
       const res = await createAI(aiData);
       console.log("AI Created successfully", res);
+      onAICreated(); 
     } catch (error) {
       console.error("Error creating AI:", error);
     } finally {
