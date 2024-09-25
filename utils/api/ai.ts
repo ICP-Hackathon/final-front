@@ -69,7 +69,8 @@ export async function createAI(aiData: {
   profile_image_url: string;
   rag_contents: string;
   rag_comments: string;
-  created_at : string
+  created_at: string;
+  examples: string;
 }) {
   const response = await fetch(`${API_BASE_URL}/ais/`, {
     method: "POST",
@@ -117,7 +118,6 @@ export async function updateAI(aiData: {
   rag_contents: string;
   rag_comments: string;
 }) {
-
   const response = await fetch(`${API_BASE_URL}/ais/`, {
     method: "PUT",
     headers: {

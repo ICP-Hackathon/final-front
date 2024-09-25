@@ -88,12 +88,12 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
               "interest",
             ];
             const missingProps = requiredProps.filter(
-              (prop) => !(prop in userInfo),
+              (prop) => !(prop in userInfo)
             );
 
             if (missingProps.length > 0) {
               console.warn(
-                `Missing user properties: ${missingProps.join(", ")}`,
+                `Missing user properties: ${missingProps.join(", ")}`
               );
             }
 

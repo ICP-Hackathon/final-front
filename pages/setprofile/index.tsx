@@ -17,8 +17,9 @@ const SetProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { wallet, setUser } = useUserStore();
 
-  const { user, setUser, wallet } = useUserStore();
+  console.log(wallet);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value.replace(/\s+/g, "_");
@@ -36,7 +37,7 @@ const SetProfilePage = () => {
     setIsLoading(true);
     setError("");
 
-    if (!wallet.address) {
+    if (!wallet || !wallet.address) {
       setError("Wallet address is not available");
       setIsLoading(false);
       return;
@@ -70,7 +71,7 @@ const SetProfilePage = () => {
   };
 
   return (
-    <div className="max-w-[600px] min-h-screen bg-white flex flex-col px-6">
+    <div className="max-w-[600px] min-h-screen mx-auto bg-white flex flex-col px-6">
       <div className="py-4 flex-shrink-0">
         <div className="text-3xl text-gray-900 font-bold mb-4">
           Complete your profile

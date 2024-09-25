@@ -19,6 +19,8 @@ const EditProfilePage = () => {
 
   const { user, setUser, wallet } = useUserStore();
 
+  console.log(user);
+
   useEffect(() => {
     if (user) {
       setGender(user.gender || "");
@@ -42,7 +44,7 @@ const EditProfilePage = () => {
     setIsLoading(true);
     setError("");
 
-    if (!wallet.address) {
+    if (!user || !user.user_address) {
       setError("Wallet address is not available");
       setIsLoading(false);
       return;
@@ -50,7 +52,8 @@ const EditProfilePage = () => {
 
     try {
       const userData = {
-        user_address: wallet.address,
+        user_address: user.user_address,
+        trial: user.trial,
         ...(selectedProfile > 0 && {
           image_url: profileImages[selectedProfile - 1],
         }),

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Pencil, Plus } from "lucide-react";
 import { updateAI } from "@/utils/api/ai";
+import { useUserStore } from "@/store/userStore";
 
 type CategoryKey =
   | "education"
@@ -36,8 +37,7 @@ const EditAISheet: React.FC<EditAISheetProps> = ({ ai, onUpdate }) => {
   const [introductions, setIntroductions] = useState(ai.introductions);
   const [data, setData] = useState(ai.rag_contents);
   const [loading, setLoading] = useState(false);
-  const wallet = { address: "test" };
-
+  const { user } = useUserStore();
   useEffect(() => {
     if (open) {
       setSelectedCategory(ai.category);
@@ -57,7 +57,7 @@ const EditAISheet: React.FC<EditAISheetProps> = ({ ai, onUpdate }) => {
 
     const updatedAIData = {
       id: ai.id,
-      creator_address: wallet.address ?? "",
+      creator_address: user?.user_address ?? "",
       name: name,
       profile_image_url: ai.profile_image_url,
       category: selectedCategory,

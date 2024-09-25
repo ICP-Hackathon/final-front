@@ -65,12 +65,11 @@ const MyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user: storedUser, setUser } = useUserStore();
-  const wallet = { address: "test" };
-
+  const { user } = useUserStore();
   const loadUserData = async () => {
-    if (wallet.address) {
+    if (user && user.user_address) {
       try {
-        const userData = await fetchUser(wallet.address);
+        const userData = await fetchUser(user.user_address);
         console.log("Fetched User Data:", userData);
         setUser(userData);
         return userData;
@@ -82,9 +81,9 @@ const MyPage = () => {
   };
 
   const loadMyAIs = async () => {
-    if (wallet.address) {
+    if (user && user.user_address) {
       try {
-        const aisData = await fetchMyAIs(wallet.address);
+        const aisData = await fetchMyAIs(user.user_address);
         setMyAIs(aisData.ais);
       } catch (error) {
         console.error("Error fetching AI data:", error);
@@ -97,7 +96,7 @@ const MyPage = () => {
     const initializeData = async () => {
       setIsLoading(true);
       let user = storedUser;
-      if (!user && wallet.address) {
+      if (!user) {
         user = await loadUserData();
       }
       if (user) {
@@ -107,7 +106,7 @@ const MyPage = () => {
     };
 
     initializeData();
-  }, [wallet.address]);
+  }, [user?.user_address]);
 
   useEffect(() => {
     if (storedUser) {
@@ -128,7 +127,6 @@ const MyPage = () => {
     return <div>User not found. Please connect your wallet.</div>;
   }
 
-  console.log(myAIs);
   return (
     <div className="flex flex-col px-2">
       <div className="flex items-center justify-between pt-2 pb-4">
