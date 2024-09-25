@@ -17,7 +17,7 @@ const EditProfilePage = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const { user, setUser } = useUserStore();
+  const { user, setUser, wallet } = useUserStore();
 
   console.log(user);
 
@@ -61,14 +61,15 @@ const EditProfilePage = () => {
         ...(country && { country }),
         ...(interest && { interest }),
       };
-
       const result = await updateUser(userData);
       console.log("User profile updated:", result);
       setUser(result);
       router.push("/mypage");
     } catch (error) {
       setError("Failed to update profile. Please try again.");
+
       console.error("Error updating profile:", error);
+
     } finally {
       setIsLoading(false);
     }

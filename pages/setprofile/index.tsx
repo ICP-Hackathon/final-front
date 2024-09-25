@@ -17,7 +17,6 @@ const SetProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-
   const { wallet, setUser } = useUserStore();
 
   console.log(wallet);
@@ -54,6 +53,8 @@ const SetProfilePage = () => {
         country,
         interest,
       };
+
+      console.log("Creating user profile:", userData);
 
       const result = await addUser(userData);
       console.log("User profile created:", result);
