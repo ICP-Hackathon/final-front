@@ -1,10 +1,26 @@
 import Link from "next/link";
-import google from "@/assets/google.png";
-import Image from "next/image";
 import Logo from "@/assets/logo_apptos.svg";
 import { WalletSelector } from "@/components/wallet/WalletSelector";
+import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useEffect, useState } from "react";
 
 export default function Landing() {
+  const { clearUser } = useUserStore();
+  const { disconnect } = useWallet();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      // Clear user data and disconnect wallet only on initial render
+      clearUser();
+      disconnect();
+      localStorage.clear();
+
+      setIsInitialized(true);
+    }
+  }, [clearUser, disconnect, isInitialized]);
+
   return (
     <div className="h-screen flex items-center justify-center bg-white pb-16">
       <div className="max-w-[600px] w-full mx-auto px-6">

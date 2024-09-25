@@ -21,7 +21,6 @@ export const useUserStore = create<UserState>()(
           ...state,
           user,
         }));
-        // 상태가 변경된 이후 불필요한 상태 조회와 로그를 최소화
       },
       setUserWallet: (wallet) => {
         console.log("Setting user wallet in store:", wallet);
