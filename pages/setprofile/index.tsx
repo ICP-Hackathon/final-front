@@ -16,10 +16,9 @@ const SetProfilePage = () => {
   const [interest, setInterest] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const wallet = { address: "test" };
   const router = useRouter();
 
-  const setUser = useUserStore((state: any) => state.setUser);
+  const { user, setUser, wallet } = useUserStore();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value.replace(/\s+/g, "_");
@@ -53,6 +52,8 @@ const SetProfilePage = () => {
         country,
         interest,
       };
+
+      console.log("Creating user profile:", userData);
 
       const result = await addUser(userData);
       console.log("User profile created:", result);

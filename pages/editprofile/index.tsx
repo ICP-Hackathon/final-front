@@ -15,10 +15,9 @@ const EditProfilePage = () => {
   const [interest, setInterest] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const wallet = { address: "test" };
   const router = useRouter();
 
-  const { user, setUser } = useUserStore();
+  const { user, setUser, wallet } = useUserStore();
 
   useEffect(() => {
     if (user) {
@@ -59,14 +58,15 @@ const EditProfilePage = () => {
         ...(country && { country }),
         ...(interest && { interest }),
       };
-
       const result = await updateUser(userData);
       console.log("User profile updated:", result);
       setUser(result);
       router.push("/mypage");
     } catch (error) {
       setError("Failed to update profile. Please try again.");
+
       console.error("Error updating profile:", error);
+
     } finally {
       setIsLoading(false);
     }
