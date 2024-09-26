@@ -1,75 +1,63 @@
+import { useState } from "react";
 import { useUserStore } from "@/store/userStore";
 import { addLike, delLike } from "@/utils/api/user";
 import { Heart } from "lucide-react";
-import { useState } from "react";
 
 interface CardProps {
   ai_id: string;
   name: string;
   category: string;
   like: boolean;
+  onChatClick: (e: React.MouseEvent) => void;
 }
 
 const Card: React.FC<CardProps> = ({ name, category, ai_id, like }) => {
   const { user } = useUserStore();
   const [likes, setLikes] = useState(like);
 
-  const addLikes = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLikeClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user || !user.user_address) {
+      window.alert("Please log in to like AIs");
+      return;
+    }
+
+    const userData = {
+      user_address: user.user_address,
+      ai_id: ai_id,
+    };
 
     try {
-      if (user && user.user_address) {
-        const userData = {
-          user_address: user.user_address,
-          ai_id: ai_id,
-        };
+      if (likes) {
+        await delLike(userData);
+        setLikes(false);
+      } else {
         await addLike(userData);
         setLikes(true);
       }
     } catch (error) {
-      window.alert("Fail to Like AI");
-    }
-  };
-
-  const delLikes = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      if (user && user.user_address) {
-        const userData = {
-          user_address: user.user_address,
-          ai_id: ai_id,
-        };
-        await delLike(userData);
-        setLikes(false);
-      }
-    } catch (error) {
-      window.alert("Fail to Like AI");
+      window.alert("Failed to update like status");
     }
   };
 
   return (
-    <div className="p-4 bg-gray-50 rounded-lg shadow-md relative h-[160px] flex flex-col">
-      <div className="bg-primary-900 rounded-md size-14 mb-4"></div>
-      <div className="flex-grow flex flex-col justify-between">
-        <h3 className="text-sm font-semibold min-h-[20px] overflow-hidden text-ellipsis whitespace-nowrap">
+    <div className="p-4 bg-[#1F222A] rounded-[16px] shadow-md relative flex flex-col">
+      <div className="bg-primary-900 rounded-[16px] size-14 mb-4"></div>
+      <div className="flex-grow flex flex-col">
+        <h3 className="text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap mb-2">
           {name}
         </h3>
-        <p className="text-xs text-gray-500 min-h-[16px]">{category}</p>
+        <p className="text-xs text-gray-500">{category}</p>
       </div>
-      <button className="absolute top-2 right-2 text-gray-700">
-        {likes ? (
-          <>
-            <Heart
-              color="#F75555"
-              fill="#F75555"
-              size={16}
-              onClick={delLikes}
-            />
-          </>
-        ) : (
-          <Heart color="#9E9E9E" size={16} onClick={addLikes} />
-        )}
+      <button
+        className="absolute top-3 right-3"
+        onClick={handleLikeClick}
+      >
+        <Heart
+          color={likes ? "#F75555" : "white"}
+          fill={likes ? "#F75555" : "none"}
+          size={24}
+        />
       </button>
     </div>
   );

@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
 import { WalletProvider } from "@/components/wallet/WalletProvider";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 type PageComponentProps = {
   title: string;

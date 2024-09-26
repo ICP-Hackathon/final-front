@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export type CategoryKey =
   | "all"
@@ -26,7 +26,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   const scrollbarRef = useRef<HTMLDivElement>(null);
   const [showScrollbar, setShowScrollbar] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [scrollbarWidth, setScrollbarWidth] = useState(20); // Default width in percentage
+  const [scrollbarWidth, setScrollbarWidth] = useState(20);
   const [isDragging, setIsDragging] = useState(false);
   const [isWideScreen, setIsWideScreen] = useState(false);
 
@@ -123,10 +123,10 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
             <button
               key={category}
               onClick={() => setSelectedCategory(categoryKey)}
-              className={`px-4 py-2 rounded-full flex-shrink-0 ${
+              className={`px-4 rounded-full flex-shrink-0 border-2 transition-colors duration-200 ease-in-out ${
                 selectedCategory === categoryKey
-                  ? "bg-primary-900 text-white"
-                  : "bg-white text-primary-900 border border-primary-900"
+                  ? "bg-primary-900 text-white border-primary-900"
+                  : "bg-[#181A20] text-primary-900 border-primary-900 hover:bg-primary-900 hover:bg-opacity-20"
               }`}
             >
               {category}
@@ -137,7 +137,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       {showScrollbar && (
         <div
           ref={scrollbarRef}
-          className="h-2 bg-gray-200 mt-2 rounded-full cursor-pointer relative"
+          className="h-2 bg-gray-200 mt-4 rounded-full cursor-pointer relative"
           onMouseDown={handleMouseDown}
         >
           <div
