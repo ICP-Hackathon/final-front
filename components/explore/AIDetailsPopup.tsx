@@ -104,7 +104,7 @@ const AIDetailsPopup: React.FC<AIDetailsPropWithName> = ({
       </div>
       <div className="p-4 mt-auto">
         <button
-          className="w-full py-4 bg-[#00D897] font-bold text-lg hover:bg-[#00C087] rounded-full flex items-center justify-center focus:outline-none transition duration-300 ease-in-out"
+          className="w-full py-2 bg-[#00D897] font-bold text-lg hover:bg-[#00C087] rounded-full flex items-center justify-center focus:outline-none transition duration-300 ease-in-out"
           onClick={handleClick}
         >
           Start a Chat <ArrowRight className="ml-1 w-4 h-4" />

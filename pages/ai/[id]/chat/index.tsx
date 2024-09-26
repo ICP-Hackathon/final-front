@@ -30,8 +30,7 @@ const AIChat = () => {
     if (chatId && user && user.user_address) {
       initializeChat();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]);
+  }, [chatId, user?.user_address]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -98,8 +97,8 @@ const AIChat = () => {
   };
 
   return (
-    <div className="flex flex-col h-full -mx-4">
-      <div className="flex-grow overflow-y-auto p-4 space-y-4 pb-32">
+    <div className="flex flex-col h-full text-white">
+      <div className="flex-grow overflow-y-auto space-y-4 pb-32">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -109,17 +108,24 @@ const AIChat = () => {
           >
             {message.role === "ai" && (
               <div className="mr-2 mb-2 flex-shrink-0">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <Logo className="" />
+                <div className="size-10 rounded-full overflow-hidden flex items-center justify-center">
+                  <Logo className="" viewBox="0 0 212 181" />
                 </div>
               </div>
             )}
             <div
-              className={`max-w-[70%] p-3 rounded-lg ${
+              className={`max-w-[80%] p-3 ${
                 message.role === "user"
-                  ? "bg-primary-900 text-white"
-                  : "bg-gray-100 text-gray-800"
+                  ? "bg-[#00D897] text-[#1F222A]"
+                  : "bg-[#373A43] text-white"
               }`}
+              style={{
+                borderTopLeftRadius: message.role === "user" ? "20px" : "8px",
+                borderTopRightRadius: "20px",
+                borderBottomLeftRadius: "20px",
+                borderBottomRightRadius:
+                  message.role === "user" ? "8px" : "20px",
+              }}
             >
               {message.content}
             </div>
@@ -127,36 +133,36 @@ const AIChat = () => {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 p-3 rounded-lg">
+            <div className="bg-[#373A43] p-3 rounded-lg">
               <div className="flex space-x-2">
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-75"></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></div>
+                <div className="w-2 h-2 bg-[#00D897] rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-[#00D897] rounded-full animate-bounce delay-75"></div>
+                <div className="w-2 h-2 bg-[#00D897] rounded-full animate-bounce delay-150"></div>
               </div>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="fixed bottom-16 left-0 right-0 bg-white">
+      <div className="fixed bottom-16 left-0 right-0 bg-[#1F222A]">
         <div className="max-w-[600px] mx-auto px-3 py-3">
           <div className="flex items-center space-x-2">
-            <div className="flex-grow bg-gray-100 rounded-lg px-5 py-4">
+            <div className="flex-grow bg-[#373A43] rounded-lg px-5 py-4">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type your message..."
-                className="w-full bg-transparent outline-none"
+                className="w-full bg-transparent outline-none text-white"
               />
             </div>
             <button
               onClick={handleSendMessage}
-              className="bg-primary-900 text-white rounded-full p-4 shadow shadow-green-200"
+              className="bg-[#00D897] bg-opacity-80 text-[#1F222A] rounded-full p-4"
               disabled={isLoading}
             >
-              <Send size={20} />
+              <Send color="white" size={20} />
             </button>
           </div>
         </div>
