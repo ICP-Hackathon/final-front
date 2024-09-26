@@ -24,32 +24,37 @@ const AIBalanceCard: React.FC<AIBalanceCardProps> = ({
   return (
     <div className="bg-[#2A2D36] rounded-xl p-4 mb-4">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center">
+        <div className="flex items-center flex-grow mr-4">
           <Image
             src={imageSrc || avatarImage}
             alt={name}
             width={48}
             height={48}
-            className="rounded-full mr-3"
+            className="rounded-full mr-3 flex-shrink-0"
           />
-
-          <div>
-            <h3 className="text-lg">{name}</h3>
-            <span className="text-xs text-primary-900 px-2 rounded-full border border-primary-900">
-              {category}
-            </span>
+          <div className="flex flex-col min-w-0">
+            <h3 className="text-lg text-white font-semibold truncate max-w-[150px]">
+              {name}
+            </h3>
+            <div className="flex items-center mt-1">
+              <span className="text-xs text-primary-900 px-2 py-1 rounded-full border border-primary-900 whitespace-nowrap">
+                {category}
+              </span>
+            </div>
           </div>
         </div>
-        <button className="text-primary-900 font-medium">Collect</button>
+        <button className="text-primary-900 font-medium flex-shrink-0">
+          Collect
+        </button>
       </div>
       <div className="flex mt-4 divide-x divide-gray-300">
         <div className="flex-1 flex flex-col items-center justify-center">
           <p className="text-sm text-gray-500">Usage</p>
-          <p className="text-lg">{usage} tokens</p>
+          <p className="text-lg text-white">{usage} tokens</p>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center">
           <p className="text-sm text-gray-500">Earnings</p>
-          <p className="text-lg">$ {earnings.toFixed(2)}</p>
+          <p className="text-lg text-white">$ {earnings.toFixed(2)}</p>
         </div>
       </div>
     </div>
