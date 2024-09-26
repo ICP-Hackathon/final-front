@@ -33,7 +33,7 @@ const Header: React.FC<HeaderBarProps> = ({ title }) => {
       </div>
       <h1 className="text-xl font-semibold">{title}</h1>
       <Link href="/mypage" passHref>
-        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center cursor-pointer">
+        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-500 flex items-center justify-center cursor-pointer">
           {isMounted && user && user.profile_image_url ? (
             <Image
               src={user.profile_image_url}

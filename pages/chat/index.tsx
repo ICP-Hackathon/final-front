@@ -37,11 +37,9 @@ const AICard: React.FC<AICardProps> = ({
 
   const addLikes = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       if (user && user.user_address) {
         const userData = {
-          //zklogin에서 user_address 받아오기Ï
           user_address: user.user_address,
           ai_id: aiId,
         };
@@ -55,11 +53,9 @@ const AICard: React.FC<AICardProps> = ({
 
   const delLikes = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       if (user && user.user_address) {
         const userData = {
-          //zklogin에서 user_address 받아오기Ï
           user_address: user.user_address,
           ai_id: aiId,
         };
@@ -73,8 +69,8 @@ const AICard: React.FC<AICardProps> = ({
 
   return (
     <div
-      className="p-4 bg-white rounded-lg flex items-center border hover:bg-gray-100 cursor-pointer transition-all duration-200"
-      onClick={() => router.push(`/ai/${aiId}/chat`)} // 전체 div 클릭 시 라우팅
+      className="p-4 bg-[#1F222A] rounded-lg flex items-center border border-[#2A2D36] hover:bg-[#2A2D36] cursor-pointer transition-all duration-200"
+      onClick={() => router.push(`/ai/${aiId}/chat`)}
     >
       {imageSrc ? (
         <Image
@@ -85,26 +81,22 @@ const AICard: React.FC<AICardProps> = ({
           className="rounded-full mr-4"
         />
       ) : (
-        <div className="w-[50px] h-[50px] rounded-full bg-primary-900 mr-4 flex items-center justify-center">
-          <span className="text-white font-bold text-lg">
-            {ai_name.charAt(0).toUpperCase()}
-          </span>
-        </div>
+        <div className="size-[50px] rounded-full bg-primary-900 mr-4 flex items-center justify-center"></div>
       )}
       <div className="flex-1 text-left">
-        <h3 className="text-sm font-semibold">{ai_name}</h3>
-        <p className="text-xs text-gray-500">{sliceAddress(creator)}</p>
+        <h3 className="text-sm font-semibold text-white">{ai_name}</h3>
+        <p className="text-xs text-gray-400">{sliceAddress(creator)}</p>
       </div>
       {icon === Heart ? (
         likes ? (
           <Heart
             className="text-primary-900"
-            color="#F75555"
-            fill="#F75555"
+            color="#00D897"
+            fill="#00D897"
             size={20}
             onClick={(e) => {
-              e.stopPropagation(); // Heart 클릭 시 라우팅 중지
-              delLikes(e); // Likes 함수 실행
+              e.stopPropagation();
+              delLikes(e);
             }}
           />
         ) : (
@@ -112,7 +104,7 @@ const AICard: React.FC<AICardProps> = ({
             className="text-primary-900"
             size={20}
             onClick={(e) => {
-              e.stopPropagation(); // Heart 클릭 시 라우팅 중지
+              e.stopPropagation();
               addLikes(e);
             }}
           />
@@ -134,20 +126,22 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   return (
     <div className="relative mb-4">
       <button
-        className="w-full flex items-center justify-between p-4 bg-primary-50 text-primary-900 rounded-xl transition-all duration-200"
+        className={`w-full flex items-center justify-between p-4 bg-primary-900 bg-opacity-20 text-primary-900 rounded-xl ${
+          isOpen ? "border-2 border-primary-900" : ""
+        }`}
         onClick={() => setOpenDropdown(isOpen ? "" : title)}
       >
         <div className="flex-1 text-center">
           <span className="text-lg">{title}</span>
         </div>
         {isOpen ? (
-          <ChevronUp className="ml-4 text-primary-500" size={20} />
+          <ChevronUp className="ml-4 text-primary-900" size={20} />
         ) : (
-          <ChevronDown className="ml-4 text-primary-500" size={20} />
+          <ChevronDown className="ml-4 text-primary-900" size={20} />
         )}
       </button>
       {isOpen && (
-        <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg z-10 max-h-[252px] overflow-y-auto">
+        <div className="absolute left-0 right-0 mt-2 bg-[#1F222A] border border-[#2A2D36] shadow-lg rounded-lg z-10 max-h-[252px] overflow-y-auto">
           {items.map((item, index) => (
             <AICard key={index} {...item} />
           ))}
@@ -164,30 +158,30 @@ const ChatPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUserStore();
+
   useEffect(() => {
     const loadAIModels = async () => {
       if (user && user.user_address) {
         try {
-          const ChatData = await fetchUserChats(user.user_address); // API 호출 경로와 내보내기 확인
+          const ChatData = await fetchUserChats(user.user_address);
           const formattedChats = ChatData?.chats?.map((chat: any) => ({
             aiId: chat.ai.id,
             ai_name: chat.ai.name,
             creator: chat.creator,
-            imageSrc: chat.ai.profile_img_url || "", // optional 속성 처리
-            icon: Clock, // 적절한 기본 아이콘 설정
+            imageSrc: chat.ai.profile_img_url || "",
+            icon: Clock,
           }));
-          console.log(formattedChats);
-          setChats(formattedChats || []); // 데이터가 없을 때 빈 배열
+          setChats(formattedChats || []);
 
           const LikeData = await fetchLikeList(user.user_address);
           const formattedLikes = LikeData?.ais?.map((like: any) => ({
             aiId: like.id,
             ai_name: like.name,
             creator: like.creator,
-            imageSrc: like.profile_img_url || "", // optional 속성 처리
-            icon: Heart, // 적절한 기본 아이콘 설정
+            imageSrc: like.profile_img_url || "",
+            icon: Heart,
           }));
-          setLikes(formattedLikes || []); // 데이터가 없을 때 빈 배열
+          setLikes(formattedLikes || []);
 
           setIsLoading(false);
         } catch (error) {
@@ -197,10 +191,11 @@ const ChatPage: React.FC = () => {
     };
     loadAIModels();
   }, [user?.user_address]);
+
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-white flex flex-col justify-center items-center">
+    <div className="min-h-[calc(100vh-140px)] bg-[#181A20] flex flex-col justify-center items-center">
       <div className="w-full max-w-md p-6 text-center">
-        <h2 className="text-xl text-gray-500 mb-6">Select one from below:</h2>
+        <h2 className="text-xl text-gray-400 mb-6">Select one from below:</h2>
         <DropdownMenu
           title="Choose from Saved AI"
           icon={"Heart"}
@@ -216,11 +211,11 @@ const ChatPage: React.FC = () => {
           setOpenDropdown={setOpenDropdown}
         />
         <Link href="/explore" passHref>
-          <div className="w-full flex items-center justify-between p-4 bg-primary-50 text-primary-900 rounded-xl transition-all duration-200 hover:bg-gray-100">
+          <div className="w-full flex items-center justify-between p-4 bg-primary-900 bg-opacity-20 text-primary-900 rounded-xl transition-all duration-200 hover:bg-[#2A2D36]">
             <div className="flex-1 text-center">
               <span className="text-lg">Go Explore More</span>
             </div>
-            <ArrowRight className="ml-4 text-primary-500" size={20} />
+            <ArrowRight className="ml-4 text-primary-900" size={20} />
           </div>
         </Link>
       </div>
