@@ -117,8 +117,9 @@ export interface CardData {
 export interface User {
   user_address: string;
   nickname: string;
-  image_url?: string;
+  profile_image_url?: string;
   gender?: string;
   country?: string;
   interest?: string;
+  trial?: number;
 }

@@ -29,7 +29,7 @@ function WalletButton() {
             const requiredProps: (keyof User)[] = [
               "user_address",
               "nickname",
-              "image_url",
+              "profile_image_url",
               "gender",
               "country",
               "interest",

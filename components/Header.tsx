@@ -34,9 +34,9 @@ const Header: React.FC<HeaderBarProps> = ({ title }) => {
       <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
       <Link href="/mypage" passHref>
         <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center cursor-pointer">
-          {isMounted && user && user.image_url ? (
+          {isMounted && user && user.profile_image_url ? (
             <Image
-              src={user.image_url}
+              src={user.profile_image_url}
               alt="User profile"
               width={40}
               height={40}

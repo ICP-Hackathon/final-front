@@ -47,7 +47,7 @@ const SetProfilePage = () => {
       const userData: User = {
         user_address: wallet.address,
         nickname,
-        image_url:
+        profile_image_url:
           selectedProfile > 0 ? profileImages[selectedProfile - 1] : "",
         gender,
         country,

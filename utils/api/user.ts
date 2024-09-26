@@ -5,7 +5,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export async function addUser(userData: {
   user_address: string;
   nickname: string;
-  image_url?: string;
+  profile_image_url?: string;
   gender?: string;
   country?: string;
   interest?: string;
@@ -20,7 +20,7 @@ export async function addUser(userData: {
       body: JSON.stringify({
         user_address: userData.user_address,
         nickname: userData.nickname,
-        profile_image_url: userData.image_url || "",
+        profile_image_url: userData.profile_image_url || "",
         gender: userData.gender || "",
         country: userData.country || "",
         interest: userData.interest || "",
@@ -80,7 +80,7 @@ export async function fetchMyAIs(user_address: string): Promise<AICardProps[]> {
 
 export async function updateUser(userData: {
   user_address: string;
-  image_url?: string;
+  profile_image_url?: string;
   gender?: string;
   country?: string;
   interest?: string;
@@ -96,7 +96,7 @@ export async function updateUser(userData: {
         },
         body: JSON.stringify({
           user_address: userData.user_address,
-          profile_image_url: userData.image_url || "",
+          profile_image_url: userData.profile_image_url || "",
           gender: userData.gender || "",
           country: userData.country || "",
           interest: userData.interest || "",

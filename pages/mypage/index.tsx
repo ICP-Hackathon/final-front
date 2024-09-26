@@ -132,9 +132,9 @@ const MyPage = () => {
       <div className="flex items-center justify-between pt-2 pb-4">
         <div className="flex items-center">
           <div className="size-20 bg-gray-200 rounded-full mr-4 mx-auto flex items-center justify-center overflow-hidden">
-            {storedUser.image_url ? (
+            {storedUser.profile_image_url ? (
               <img
-                src={storedUser.image_url}
+                src={storedUser.profile_image_url}
                 alt="Selected profile"
                 className="w-full h-full object-cover transform scale-150 translate-y-[-10%]"
               />

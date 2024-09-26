@@ -26,8 +26,8 @@ const EditProfilePage = () => {
       setGender(user.gender || "");
       setCountry(user.country || "");
       setInterest(user.interest || "");
-      if (user.image_url) {
-        const index = profileImages.findIndex((img) => img === user.image_url);
+      if (user.profile_image_url) {
+        const index = profileImages.findIndex((img) => img === user.profile_image_url);
         setSelectedProfile(index !== -1 ? index + 1 : 0);
       }
     }
