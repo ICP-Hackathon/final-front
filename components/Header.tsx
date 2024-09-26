@@ -6,7 +6,14 @@ import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const Header: React.FC<HeaderBarProps> = ({ title }) => {
+interface ExtendedHeaderBarProps extends HeaderBarProps {
+  onToggleSidebar?: () => void;
+}
+
+const Header: React.FC<ExtendedHeaderBarProps> = ({
+  title,
+  onToggleSidebar,
+}) => {
   const user = useUserStore((state) => state.user);
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
@@ -15,15 +22,21 @@ const Header: React.FC<HeaderBarProps> = ({ title }) => {
     setIsMounted(true);
   }, []);
 
-  // /ai/[id]/chat
-  const isAIChat =
-    /^\/ai\/[^/]+\/chat/.test(router.asPath) || router.asPath === "/test";
-
-  const isMyPage = router.asPath === "/mypage";
+  const isAIChat = /^\/ai\/[^/]+\/chat/.test(router.asPath);
+  const isMyPage = router.asPath === "/mypage" || isAIChat;
 
   return (
     <header className="py-4 px-6 flex items-center justify-between">
-      <div className="w-10">{/* Menu button code remains unchanged */}</div>
+      <div className="">
+        {isAIChat && (
+          <button
+            onClick={onToggleSidebar}
+            className="rounded-full hover:bg-gray-200 transition-colors duration-200"
+          >
+            <Menu className="size-6 text-white" />
+          </button>
+        )}
+      </div>
       <h1 className="text-xl font-semibold">{title}</h1>
       {!isMyPage && (
         <Link href="/mypage" passHref>
@@ -42,7 +55,7 @@ const Header: React.FC<HeaderBarProps> = ({ title }) => {
           </div>
         </Link>
       )}
-      {isMyPage && <div className="w-10"></div>} {/* Placeholder for spacing */}
+      {isMyPage && <div className="w-10"></div>}
     </header>
   );
 };
