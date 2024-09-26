@@ -25,6 +25,7 @@ const EditAIPage = () => {
     introductions: "",
     rag_contents: "",
     profile_image_url: "",
+    examples: "",
   });
   const [loading, setLoading] = useState(true);
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -42,6 +43,7 @@ const EditAIPage = () => {
             introductions: fetchedAIData.introductions,
             rag_contents: fetchedAIData.rag_contents,
             profile_image_url: fetchedAIData.profile_image_url,
+            examples: fetchedAIData.examples,
           });
         } catch (error) {
           console.error("Error fetching AI data:", error);
@@ -58,7 +60,7 @@ const EditAIPage = () => {
   }, [id]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setAIData((prevData) => ({
@@ -120,7 +122,7 @@ const EditAIPage = () => {
 
   return (
     <>
-      <div className="flex-grow overflow-y-auto px-4 scrollbar-hide">
+      <div className="flex-grow overflow-y-auto px-4 pb-32 scrollbar-hide">
         <div className="space-y-6 pb-20">
           <div className="flex justify-center">
             <div className="relative size-20 bg-primary-900 rounded-full overflow-hidden">
@@ -159,15 +161,7 @@ const EditAIPage = () => {
             >
               AI Name
             </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={aiData.name}
-              className="w-full p-2 border-b border-gray-300 focus:border-primary-900 focus:outline-none"
-              placeholder="Name your AI"
-              onChange={handleInputChange}
-            />
+            <p className="font-bold">{aiData.name}</p>
           </div>
 
           <div className="space-y-2">
@@ -220,6 +214,17 @@ const EditAIPage = () => {
                   onChange={handleInputChange}
                 />
               </div>
+            </div>
+            <div className="bg-white rounded-lg border py-2 px-4">
+              <h3 className="font-semibold mb-2 pb-2 border-b">Examples</h3>
+              <textarea
+                name="examples"
+                value={aiData.examples}
+                placeholder="Provide a short example of this AI."
+                className="w-full text-gray-600 bg-transparent resize-none focus:outline-none"
+                rows={2}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
         </div>

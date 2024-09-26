@@ -38,7 +38,7 @@ const TodaySection: React.FC<TodaySectionProps> = ({
                   <Card
                     ai_id={item.id}
                     name={item.name}
-                    creator={item.creator}
+                    category={item.category}
                     like={item.like}
                   />
                 </div>

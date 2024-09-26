@@ -20,7 +20,7 @@ const AIDetailsPopup: React.FC<AIDetailsPropWithName> = ({
 
   return (
     <DialogContent className="sm:max-w-[425px] rounded-3xl p-0 overflow-visible flex flex-col">
-      <div className="p-6 overflow-y-auto">
+      <div className="px-6 pt-6 pb-3 overflow-y-auto">
         <div className="space-y-4">
           <div className="flex justify-center pt-5">
             <div className="inline-block px-3 py-1 bg-primary-50 text-primary-900 rounded-full text-sm">
@@ -37,7 +37,7 @@ const AIDetailsPopup: React.FC<AIDetailsPropWithName> = ({
             Average Token Usage:
             <span className="text-black font-bold ml-1">
               {Math.round(
-                ai_detail.total_token_usage / (ai_detail.chat_count || 1),
+                ai_detail.total_token_usage / (ai_detail.chat_count || 1)
               )}
             </span>
           </p>
@@ -70,9 +70,22 @@ const AIDetailsPopup: React.FC<AIDetailsPropWithName> = ({
                         {txScanURL(rag.tx_url)}
                       </a>
                     </div>
-                  ),
+                  )
                 )
               : "No RAG information available."}
+          </div>
+
+          <div className="bg-white rounded-2xl">
+            <h3 className="font-semibold text-gray-700 border-b">Examples</h3>
+            {ai_detail.examples ? (
+              <p className="mt-2 bg-gray-50 p-3 rounded-2xl text-gray-700 text-sm text-center">
+                {ai_detail.examples}
+              </p>
+            ) : (
+              <p className="mt-2 bg-gray-50 p-3 rounded-2xl text-gray-700 text-sm text-center">
+                No example provided
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -81,7 +94,7 @@ const AIDetailsPopup: React.FC<AIDetailsPropWithName> = ({
           className="w-full py-4 bg-primary-900 text-white font-bold text-[18px] hover:bg-primary-700 rounded-full flex items-center justify-center focus:outline-none"
           onClick={handleClick}
         >
-          Start Chat!
+          Start a Chat!
         </button>
       </div>
     </DialogContent>

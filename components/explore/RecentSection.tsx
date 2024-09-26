@@ -35,7 +35,7 @@ const RecentSection: React.FC<RecentSectionProps> = ({
                 <Card
                   ai_id={item.id}
                   name={item.name}
-                  creator={item.creator}
+                  category={item.category}
                   like={item.like}
                 />
               </div>

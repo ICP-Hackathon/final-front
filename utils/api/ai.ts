@@ -117,6 +117,7 @@ export async function updateAI(aiData: {
   introductions: string;
   rag_contents: string;
   rag_comments: string;
+  examples: string;
 }) {
   const response = await fetch(`${API_BASE_URL}/ais/`, {
     method: "PUT",
