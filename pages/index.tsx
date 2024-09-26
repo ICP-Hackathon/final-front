@@ -1,25 +1,36 @@
 import Link from "next/link";
 import Logo from "@/assets/logo_apptos.svg";
-import { WalletSelector } from "@/components/wallet/WalletSelector";
 import { useUserStore } from "@/store/userStore";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useEffect, useState } from "react";
+import WalletButton from "@/components/wallet/WalletButton";
+import { useWallet } from "@suiet/wallet-kit";
 
 export default function Landing() {
   const { clearUser } = useUserStore();
-  const { disconnect } = useWallet();
+  const wallet = useWallet();
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (!isInitialized) {
-      // Clear user data and disconnect wallet only on initial render
-      clearUser();
-      disconnect();
-      localStorage.clear();
+    const handleLogout = async () => {
+      if (!isInitialized) {
+        clearUser();
+        localStorage.clear();
 
-      setIsInitialized(true);
-    }
-  }, [clearUser, disconnect, isInitialized]);
+        if (wallet.connected) {
+          try {
+            await wallet.disconnect();
+            console.log("Wallet disconnected successfully");
+          } catch (error) {
+            console.error("Failed to disconnect wallet:", error);
+          }
+        }
+
+        setIsInitialized(true);
+      }
+    };
+
+    handleLogout();
+  }, [clearUser, wallet, isInitialized]);
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -29,14 +40,14 @@ export default function Landing() {
         <div className="w-full flex flex-col items-center mb-12">
           <div className="font-semibold text-4xl pb-3">Welcome to</div>
           <div className="font-semibold text-4xl pb-4 text-primary-900">
-            AppToS 👋
+            SuieTail 👋
           </div>
           <div className="text-primary-900 text-center">
-            Sell, Socialize, Satisfy your needs
+            You can tail me anything
           </div>
         </div>
         <Link
-          href="https://apptosblockblock.gitbook.io/apptos"
+          href="https://suiblockblock.gitbook.io/suietail"
           target="_blank"
           className="w-full mb-24 bg-primary-900 text-white font-semibold py-4 rounded-full shadow-md hover:bg-primary-100 transition duration-300 ease-in-out flex items-center justify-center"
         >
@@ -48,7 +59,7 @@ export default function Landing() {
             <span className="px-4 text-gray-300">Log in/Sign up</span>
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
-          <WalletSelector />
+          <WalletButton></WalletButton>
         </div>
       </div>
     </div>

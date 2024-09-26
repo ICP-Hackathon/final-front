@@ -12,15 +12,18 @@ interface UserState {
 
 export const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       wallet: null,
       setUser: (user) => {
         console.log("Setting user in store:", user);
-        set((state) => ({
-          ...state,
-          user,
-        }));
+        set((state) => {
+          console.log("Previous state:", state);
+          const newState = { ...state, user };
+          console.log("New state:", newState);
+          return newState;
+        });
+        console.log("User in store after setting:", get().user);
       },
       setUserWallet: (wallet) => {
         console.log("Setting user wallet in store:", wallet);
@@ -34,6 +37,6 @@ export const useUserStore = create<UserState>()(
     {
       name: "user-storage",
       getStorage: () => localStorage,
-    }
-  )
+    },
+  ),
 );
