@@ -25,7 +25,6 @@ export default function ExplorePage() {
   const [selectedAI, setSelectedAI] = useState<CardData | null>(null);
   const [todayCards, setTodayCards] = useState<CardData[] | null>(null);
   const [trendCards, setTrendCards] = useState<CardData[] | null>(null);
-  console.log(todayCards);
   console.log(trendCards);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUserStore();
@@ -54,7 +53,12 @@ export default function ExplorePage() {
             user.user_address,
             { offset: 0, limit: 10 }
           );
-          setTrendCards(Trenddata.ais);
+          setTrendCards(
+            Trenddata.ais.sort(
+              (a: CardData, b: CardData) =>
+                b.daily_user_access - a.daily_user_access
+            )
+          );
         } catch (error) {
           console.error(error);
         }
@@ -78,7 +82,7 @@ export default function ExplorePage() {
             setSelectedAI={setSelectedAI}
           />
           <RecentSection
-            title={"Recent"}
+            title={"Weekly Trends"}
             trendCards={trendCards}
             setSelectedAI={setSelectedAI}
           />

@@ -57,7 +57,7 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
     try {
       const res = await createAI(aiData);
       console.log("AI Created successfully", res);
-      onAICreated(); 
+      onAICreated();
     } catch (error) {
       console.error("Error creating AI:", error);
     } finally {
@@ -125,6 +125,9 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
                 placeholder="Name your AI"
                 onChange={handleNameChange}
               />
+              <p className="text-[12px] px-1">
+                Once created, the name cannot be changed.
+              </p>
             </div>
 
             <div className="space-y-2">
@@ -154,10 +157,10 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
             <div className="space-y-4">
               <div className="bg-white rounded-lg border py-2 px-4">
                 <h3 className="font-semibold mb-2 pb-2 border-b">
-                  Introduction
+                  Describe your AI
                 </h3>
                 <textarea
-                  placeholder="Add a short description"
+                  placeholder="Provide a brief first-person description."
                   className="w-full text-gray-600 bg-transparent resize-none focus:outline-none"
                   rows={2}
                   onChange={(e) => setIntroductions(e.target.value)}

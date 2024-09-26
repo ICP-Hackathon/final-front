@@ -111,6 +111,7 @@ export interface CardData {
   total_prompt_token_usage: number;
   total_token_usage: number;
   rags: any;
+  examples: string;
 }
 
 export interface User {
