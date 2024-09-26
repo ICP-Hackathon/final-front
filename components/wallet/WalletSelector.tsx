@@ -132,7 +132,7 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   return connected ? (
     <button
       onClick={handleConnectedButtonClick}
-      className="w-full bg-white text-gray-900 font-semibold py-4 px-6 border rounded-full mb-8 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-between"
+      className="w-full bg-[#1F222A] font-semibold py-4 px-6 border border-primary-900 rounded-full mb-8 hover:bg-opacity-70 transition duration-300 ease-in-out flex items-center justify-between"
     >
       <div className="flex-grow" />
       <span className="text-center">
@@ -145,7 +145,7 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   ) : (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <button className="w-full bg-white text-gray-900 font-semibold py-4 border rounded-full mb-8 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center">
+        <button className="w-full bg-[#1F222A] font-semibold py-4 border rounded-full mb-8 hover:bg-opacity-70 transition duration-300 ease-in-out flex items-center justify-center">
           <div className="flex items-center justify-center w-full">
             <Image
               src={google}

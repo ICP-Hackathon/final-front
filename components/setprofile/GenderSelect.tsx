@@ -30,12 +30,12 @@ const GenderSelect: React.FC<GenderSelectProps> = ({ value, onChange }) => {
     <div className="relative">
       <label
         htmlFor="gender"
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-gray-300 mb-1"
       >
         Gender
       </label>
       <div
-        className="w-full p-2 border-b border-gray-300 flex items-center justify-between cursor-pointer"
+        className="w-full p-2 border-b border-gray-600 flex items-center justify-between cursor-pointer bg-transparent text-white"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>
@@ -44,11 +44,11 @@ const GenderSelect: React.FC<GenderSelectProps> = ({ value, onChange }) => {
         <ChevronDown className="w-5 h-5 text-gray-400" />
       </div>
       {isOpen && (
-        <ul className="absolute z-10 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-lg">
+        <ul className="absolute z-10 w-full bg-[#2A2D36] border border-gray-600 mt-1 rounded-md shadow-lg max-h-[200px] overflow-y-auto">
           {options.map((option) => (
             <li
               key={option.value}
-              className="p-2 hover:bg-gray-100 cursor-pointer"
+              className="p-2 hover:bg-[#00D897] cursor-pointer text-white"
               onClick={() => handleSelect(option)}
             >
               {option.label}
