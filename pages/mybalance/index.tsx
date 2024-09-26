@@ -99,7 +99,7 @@ const MyBalancePage = () => {
   const totalBalance = 437000; // This should be fetched from an API or calculated
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="">
       <div className="bg-primary-900 bg-opacity-[42%] rounded-xl p-4 mb-6 text-center">
         <div className="flex justify-between mb-4">
           <div className="flex-1 pr-2 ">
