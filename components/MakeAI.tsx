@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -32,14 +32,32 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
   const [introductions, setIntroductions] = useState("");
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [nameError, setNameError] = useState("");
+
   const { user } = useUserStore();
   //ai 이름 띄어쓰기 변경
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value.replace(/\s+/g, "_");
-    setName(newName);
+    if (newName.length <= 18) {
+      setName(newName);
+      setNameError("");
+    } else {
+      setNameError("Name must be 18 characters or less");
+    }
   };
 
+  useEffect(() => {
+    setIsFormValid(
+      name !== "" &&
+        selectedCategory !== "" &&
+        introductions !== "" &&
+        data !== "",
+    );
+  }, [name, selectedCategory, introductions, data]);
+
   const handleCreate = async () => {
+    if (!isFormValid) return;
     setLoading(true);
 
     const aiData = {
@@ -80,14 +98,17 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <button className="w-full py-4 bg-primary-50 text-primary-900 hover:bg-primary-700 rounded-full flex items-center justify-center">
+        <button className="w-full py-4 bg-primary-900 text-white hover:bg-primary-700 rounded-full flex items-center justify-center">
           <Plus className="mr-4" size={24} />
           Create Custom AI
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[calc(100vh-4rem)] p-0">
+      <SheetContent
+        side="bottom"
+        className="h-[calc(100vh-4rem)] p-0 border-t-0"
+      >
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center justify-between p-4">
             <h2 className="text-xl font-semibold flex-grow text-center">
               Create Custom AI
             </h2>
@@ -114,18 +135,23 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
             <div>
               <label
                 htmlFor="nickname"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium mb-1"
               >
                 AI Name
               </label>
               <input
                 type="text"
                 id="nickname"
-                className="w-full p-2 border-b border-gray-300 focus:border-primary-900 focus:outline-none"
-                placeholder="Name your AI"
+                className="w-full p-2 border-b bg-inherit border-gray-300 focus:border-primary-900 focus:outline-none"
+                placeholder="Name your AI (max 18 characters)"
                 onChange={handleNameChange}
+                value={name}
+                maxLength={18}
               />
-              <p className="text-[12px] px-1">
+              {nameError && (
+                <p className="text-red-500 text-xs mt-1">{nameError}</p>
+              )}
+              <p className="text-[12px] p-2">
                 Once created, the name cannot be changed.
               </p>
             </div>
@@ -141,10 +167,10 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(categoryKey)}
-                      className={`px-4 py-2 rounded-full ${
+                      className={`px-4 text-primary-900 bg-primary-900 border-primary-900 border bg-opacity-10 rounded-full flex-shrink-0 transition-colors duration-200 ease-in-out ${
                         selectedCategory === categoryKey
-                          ? "bg-primary-900 text-white"
-                          : "bg-white text-primary-900 border border-primary-900"
+                          ? "border border-primary-900"
+                          : "border-opacity-10"
                       }`}
                     >
                       {category}
@@ -155,52 +181,54 @@ const CreateCustomAISheet: React.FC<CreateCustomAISheetProps> = ({
             </div>
 
             <div className="space-y-4">
-              <div className="bg-white rounded-lg border py-2 px-4">
-                <h3 className="font-semibold mb-2 pb-2 border-b">
+              <div className="rounded-lg border border-gray-700 py-2 px-3 bg-[#1F222A]">
+                <h3 className="mb-2 pb-1 border-b border-gray-700">
                   Describe your AI
                 </h3>
                 <textarea
                   placeholder="Provide a brief first-person description."
-                  className="w-full text-gray-600 bg-transparent resize-none focus:outline-none"
+                  className="w-full bg-transparent resize-none focus:outline-none"
                   rows={2}
                   onChange={(e) => setIntroductions(e.target.value)}
                 />
               </div>
 
-              <div className="bg-white rounded-lg border py-2 px-4">
-                <h3 className="font-semibold mb-2">Data</h3>
+              <div className="rounded-lg border border-gray-700 py-2 px-3 bg-[#1F222A]">
+                <h3 className="mb-2 pb-1 border-b border-gray-700">Data</h3>
                 <div className="space-y-2">
                   <textarea
                     placeholder="Provide things to learn"
-                    className="w-full text-gray-600 bg-transparent border-b border-gray-200 focus:outline-none focus:border-primary-900"
+                    className="w-full bg-transparent focus:outline-none focus:border-primary-900"
                     rows={3}
                     onChange={(e) => setData(e.target.value)}
                   />
                 </div>
               </div>
 
-              {/* <div className="bg-white rounded-lg border py-2 px-4">
-                <h3 className="font-semibold mb-2">Examples</h3>
+              <div className="rounded-lg border border-gray-700 py-2 px-3 bg-[#1F222A]">
+                <h3 className=" mb-2 pb-1 border-b border-gray-700">
+                  Examples
+                </h3>
                 <div className="space-y-2">
                   <input
                     type="text"
                     placeholder="Provide an example to initiate the conversation"
-                    className="w-full text-gray-600 bg-transparent border-b border-gray-200 focus:outline-none focus:border-primary-900"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Click to edit"
-                    className="w-full text-gray-600 bg-transparent focus:outline-none focus:border-primary-900"
+                    className="w-full bg-transparent focus:outline-none focus:border-primary-900"
                   />
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
 
-          <div className="p-4 bg-white border-t">
+          <div className="p-4">
             <button
-              className="w-full py-4 bg-primary-50 text-primary-900 hover:bg-primary-700 rounded-full flex items-center justify-center"
+              className={`w-full py-4 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                isFormValid
+                  ? "bg-primary-900 text-white hover:bg-primary-700"
+                  : "bg-primary-900 bg-opacity-20 text-primary-900 cursor-not-allowed"
+              }`}
               onClick={handleCreate}
+              disabled={!isFormValid}
             >
               Create
             </button>

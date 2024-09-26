@@ -4,6 +4,7 @@ import CreateCustomAISheet from "@/components/MakeAI";
 import { useEffect, useState, useCallback } from "react";
 import { CardData } from "@/utils/interface";
 import { fetchAIs } from "@/utils/api/ai";
+import { ArrowDownUp } from "lucide-react";
 
 export default function SearchPage() {
   const [searchCards, setSearchCards] = useState<CardData[] | null>(null);
@@ -29,6 +30,12 @@ export default function SearchPage() {
     <div className="flex flex-col h-full">
       <div className="mt-2 mb-4">
         <Search setSearch={setSearchCards} />
+      </div>
+      <div className="flex justify-end px-4 mb-2">
+        <button className="text-[#00D897] flex items-center">
+          <ArrowDownUp size={16} className="mr-1" />
+          Sort by
+        </button>
       </div>
       <div className="flex-grow overflow-y-auto mb-16">
         {isLoading ? (

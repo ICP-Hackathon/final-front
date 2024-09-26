@@ -5,6 +5,7 @@ import { createChat, fetchChatHistory, sendMessage } from "@/utils/api/chat";
 import { Send } from "lucide-react";
 import Logo from "@/assets/logo_apptos.svg";
 import { useUserStore } from "@/store/userStore";
+import { fetchAIDetails } from "@/utils/api/ai";
 
 const AIChat = () => {
   const router = useRouter();
@@ -173,10 +174,24 @@ const AIChat = () => {
 
 export default AIChat;
 
-export async function getServerSideProps() {
-  return {
-    props: {
-      title: "AI Chat",
-    },
-  };
+export async function getServerSideProps(context: any) {
+  const { id } = context.query;
+
+  try {
+    const aiDetails = await fetchAIDetails(id as string);
+    return {
+      props: {
+        title: aiDetails.name,
+        aiName: aiDetails.name,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching AI details:", error);
+    return {
+      props: {
+        title: "AI Chat",
+        aiName: "AI Assistant",
+      },
+    };
+  }
 }

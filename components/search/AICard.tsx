@@ -13,15 +13,13 @@ export const AICard = ({ item }: AICardProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border-b border-gray-200 w-full">
+    <div className="flex items-center justify-between px-2 py-3 border-b border-gray-700 w-full">
       <Dialog>
         <DialogTrigger asChild>
           <div className="flex items-center cursor-pointer flex-grow min-w-0 mr-4">
             {item.profile_image_url ? (
               <Image
-                // 수정 필요
-                // src={item.profile_image_url}
-                src={""}
+                src={item.profile_image_url}
                 alt={item.name}
                 width={50}
                 height={50}
@@ -29,9 +27,6 @@ export const AICard = ({ item }: AICardProps) => {
               />
             ) : (
               <div className="w-[50px] h-[50px] rounded-full bg-primary-900 mr-4 flex-shrink-0 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">
-                  {item.name.charAt(0).toUpperCase()}
-                </span>
               </div>
             )}
             <div className="min-w-0 flex-grow">
@@ -48,7 +43,7 @@ export const AICard = ({ item }: AICardProps) => {
       </Dialog>
 
       <button
-        className="px-4 py-2 bg-primary-50 text-primary-900 rounded-full hover:bg-primary-700 transition-colors flex items-center flex-shrink-0 whitespace-nowrap"
+        className="pl-4 pr-2 py-1 bg-primary-900 bg-opacity-20 text-primary-900 rounded-full hover:bg-primary-700 transition-colors flex items-center flex-shrink-0 whitespace-nowrap"
         onClick={handleChatClick}
       >
         Chat

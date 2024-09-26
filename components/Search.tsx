@@ -91,7 +91,7 @@ const Search = ({ setSearch }: SearchProps) => {
         <input
           type="text"
           placeholder="Search your best-fit AI"
-          className="w-full p-3 pl-10 bg-gray-100 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+          className="w-full p-3 pl-10 bg-[#262A35] rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
           onChange={(e) => onSearchChange(e.target.value)}
           onClick={(e) => e.stopPropagation()}
         />

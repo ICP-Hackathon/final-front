@@ -29,41 +29,29 @@ const AICard: React.FC<AICardProps> = ({
   ai_name,
   creator,
   imageSrc,
-  icon,
+  icon: Icon,
 }) => {
   const router = useRouter();
   const { user } = useUserStore();
   const [likes, setLikes] = useState(true);
 
-  const addLikes = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (user && user.user_address) {
-        const userData = {
-          user_address: user.user_address,
-          ai_id: aiId,
-        };
-        await addLike(userData);
-        setLikes(true);
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (user && user.user_address) {
+      const userData = {
+        user_address: user.user_address,
+        ai_id: aiId,
+      };
+      try {
+        if (likes) {
+          await delLike(userData);
+        } else {
+          await addLike(userData);
+        }
+        setLikes(!likes);
+      } catch (error) {
+        window.alert("Failed to update like status");
       }
-    } catch (error) {
-      window.alert("Fail to Like AI");
-    }
-  };
-
-  const delLikes = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (user && user.user_address) {
-        const userData = {
-          user_address: user.user_address,
-          ai_id: aiId,
-        };
-        await delLike(userData);
-        setLikes(false);
-      }
-    } catch (error) {
-      window.alert("Fail to Like AI");
     }
   };
 
@@ -72,46 +60,40 @@ const AICard: React.FC<AICardProps> = ({
       className="p-4 bg-[#1F222A] rounded-lg flex items-center border border-[#2A2D36] hover:bg-[#2A2D36] cursor-pointer transition-all duration-200"
       onClick={() => router.push(`/ai/${aiId}/chat`)}
     >
-      {imageSrc ? (
-        <Image
-          src={imageSrc}
-          alt={ai_name}
-          width={50}
-          height={50}
-          className="rounded-full mr-4"
-        />
-      ) : (
-        <div className="size-[50px] rounded-full bg-primary-900 mr-4 flex items-center justify-center"></div>
-      )}
-      <div className="flex-1 text-left">
-        <h3 className="text-sm font-semibold text-white">{ai_name}</h3>
-        <p className="text-xs text-gray-400">{sliceAddress(creator)}</p>
-      </div>
-      {icon === Heart ? (
-        likes ? (
-          <Heart
-            className="text-primary-900"
-            color="#00D897"
-            fill="#00D897"
-            size={20}
-            onClick={(e) => {
-              e.stopPropagation();
-              delLikes(e);
-            }}
+      <div className="flex-shrink-0 mr-4">
+        {imageSrc ? (
+          <Image
+            src={imageSrc}
+            alt={ai_name}
+            width={50}
+            height={50}
+            className="rounded-full"
           />
         ) : (
+          <div className="w-[50px] h-[50px] rounded-full bg-primary-900 flex items-center justify-center"></div>
+        )}
+      </div>
+      <div className="flex-grow min-w-0 mr-2">
+        <h3 className="text-sm font-semibold text-white truncate text-left">
+          {ai_name}
+        </h3>
+        <p className="text-xs text-gray-400 truncate text-left">
+          {creator}
+        </p>
+      </div>
+      <div className="flex-shrink-0 ml-2">
+        {Icon === Heart ? (
           <Heart
             className="text-primary-900"
+            color={likes ? "#00D897" : "currentColor"}
+            fill={likes ? "#00D897" : "none"}
             size={20}
-            onClick={(e) => {
-              e.stopPropagation();
-              addLikes(e);
-            }}
+            onClick={handleLike}
           />
-        )
-      ) : (
-        <Clock className="text-primary-900" size={20} />
-      )}
+        ) : (
+          <Clock className="text-primary-900" size={20} />
+        )}
+      </div>
     </div>
   );
 };
