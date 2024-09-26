@@ -4,6 +4,7 @@ import CountrySelect from "@/components/setprofile/CountrySelect";
 import { UserRound } from "lucide-react";
 import { updateUser } from "@/utils/api/user";
 import GenderSelect from "@/components/setprofile/GenderSelect";
+import { useWallet } from "@suiet/wallet-kit";
 import { useUserStore } from "@/store/userStore";
 import Image from "next/image";
 
@@ -15,8 +16,15 @@ const EditProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const wallet = useWallet();
 
-  const { user, setUser, wallet } = useUserStore();
+  const { user, setUser } = useUserStore();
+
+  const profileImages = [
+    "https://apptos.s3.ap-southeast-2.amazonaws.com/1.png",
+    "https://apptos.s3.ap-southeast-2.amazonaws.com/2.png",
+    "https://apptos.s3.ap-southeast-2.amazonaws.com/3.png",
+  ];
 
   useEffect(() => {
     if (user) {
@@ -27,16 +35,10 @@ const EditProfilePage = () => {
         const index = profileImages.findIndex(
           (img) => img === user.profile_image_url,
         );
-        setSelectedProfile(index !== -1 ? index + 1 : 0);
+        setSelectedProfile(index !== -1 ? index : 0);
       }
     }
   }, [user]);
-
-  const profileImages = [
-    "https://apptos.s3.ap-southeast-2.amazonaws.com/1.png",
-    "https://apptos.s3.ap-southeast-2.amazonaws.com/2.png",
-    "https://apptos.s3.ap-southeast-2.amazonaws.com/3.png",
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,12 +55,11 @@ const EditProfilePage = () => {
       const userData = {
         user_address: user.user_address,
         trial: user.trial,
-        ...(selectedProfile > 0 && {
-          image_url: profileImages[selectedProfile - 1],
-        }),
-        ...(gender && { gender }),
-        ...(country && { country }),
-        ...(interest && { interest }),
+        profile_image_url:
+          selectedProfile !== -1 ? profileImages[selectedProfile] : "",
+        gender,
+        country,
+        interest,
       };
       const result = await updateUser(userData);
       console.log("User profile updated:", result);
@@ -81,16 +82,16 @@ const EditProfilePage = () => {
       </div>
 
       <div className="flex-grow overflow-y-auto pb-4">
-        <div className="size-32 bg-[#2A2D36] rounded-full mb-4 mx-auto flex items-center justify-center overflow-hidden">
-          {selectedProfile === 0 ? (
-            <UserRound className="text-gray-400 size-24" />
+        <div className="w-32 h-32 bg-[#2A2D36] rounded-full mb-4 mx-auto flex items-center justify-center overflow-hidden">
+          {selectedProfile === -1 ? (
+            <UserRound className="text-gray-400 w-24 h-24" />
           ) : (
             <Image
-              src={profileImages[selectedProfile - 1]}
+              src={profileImages[selectedProfile]}
               alt="Selected profile"
               width={128}
               height={128}
-              className="object-cover transform scale-150 translate-y-[-10%]"
+              className="object-cover"
             />
           )}
         </div>
@@ -99,9 +100,9 @@ const EditProfilePage = () => {
           {profileImages.map((img, index) => (
             <button
               key={index}
-              onClick={() => setSelectedProfile(index + 1)}
-              className={`size-16 rounded-full overflow-hidden border-2 bg-[#2A2D36] ${
-                selectedProfile === index + 1
+              onClick={() => setSelectedProfile(index)}
+              className={`w-16 h-16 rounded-full overflow-hidden border-2 bg-[#2A2D36] ${
+                selectedProfile === index
                   ? "border-primary-900"
                   : "border-transparent"
               }`}
@@ -111,7 +112,7 @@ const EditProfilePage = () => {
                 alt={`Profile ${index + 1}`}
                 width={64}
                 height={64}
-                className="object-cover transform scale-150 translate-y-[-10%]"
+                className="object-cover"
               />
             </button>
           ))}

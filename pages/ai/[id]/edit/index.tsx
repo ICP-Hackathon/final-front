@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Plus } from "lucide-react";
 import { fetchAIDetails, updateAI } from "@/utils/api/ai";
-import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 
 type CategoryKey =
   | "education"
@@ -17,7 +17,7 @@ type CategoryKey =
 const EditAIPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { user } = useUserStore();
+  const wallet = useWallet();
 
   const [aiData, setAIData] = useState({
     name: "",
@@ -76,7 +76,7 @@ const EditAIPage = () => {
   const handleUpdate = async () => {
     setUpdateLoading(true);
 
-    if (!id || typeof id !== "string" || !user?.user_address) {
+    if (!id || typeof id !== "string" || !wallet.address) {
       console.error("Missing AI ID or wallet address");
       setUpdateLoading(false);
       return;
@@ -84,7 +84,7 @@ const EditAIPage = () => {
 
     const updatedAIData = {
       id: id,
-      creator_address: user?.user_address,
+      creator_address: wallet.address,
       ...aiData,
       rag_comments: "UpdatedAI",
     };

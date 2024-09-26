@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { fetchUserChats } from "@/utils/api/chat";
 import { addLike, delLike, fetchLikeList } from "@/utils/api/user";
-import { sliceAddress } from "@/utils/lib/address";
-import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 
 interface AICardProps {
   aiId: string;
@@ -32,14 +31,14 @@ const AICard: React.FC<AICardProps> = ({
   icon: Icon,
 }) => {
   const router = useRouter();
-  const { user } = useUserStore();
+  const wallet = useWallet();
   const [likes, setLikes] = useState(true);
 
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (user && user.user_address) {
+    if (wallet.address) {
       const userData = {
-        user_address: user.user_address,
+        user_address: wallet.address,
         ai_id: aiId,
       };
       try {
@@ -77,9 +76,7 @@ const AICard: React.FC<AICardProps> = ({
         <h3 className="text-sm font-semibold text-white truncate text-left">
           {ai_name}
         </h3>
-        <p className="text-xs text-gray-400 truncate text-left">
-          {creator}
-        </p>
+        <p className="text-xs text-gray-400 truncate text-left">{creator}</p>
       </div>
       <div className="flex-shrink-0 ml-2">
         {Icon === Heart ? (
@@ -139,13 +136,13 @@ const ChatPage: React.FC = () => {
   const [likes, setLikes] = useState<AICardProps[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useUserStore();
+  const wallet = useWallet();
 
   useEffect(() => {
     const loadAIModels = async () => {
-      if (user && user.user_address) {
+      if (wallet.address) {
         try {
-          const ChatData = await fetchUserChats(user.user_address);
+          const ChatData = await fetchUserChats(wallet.address);
           const formattedChats = ChatData?.chats?.map((chat: any) => ({
             aiId: chat.ai.id,
             ai_name: chat.ai.name,
@@ -155,7 +152,7 @@ const ChatPage: React.FC = () => {
           }));
           setChats(formattedChats || []);
 
-          const LikeData = await fetchLikeList(user.user_address);
+          const LikeData = await fetchLikeList(wallet.address);
           const formattedLikes = LikeData?.ais?.map((like: any) => ({
             aiId: like.id,
             ai_name: like.name,
@@ -172,7 +169,7 @@ const ChatPage: React.FC = () => {
       }
     };
     loadAIModels();
-  }, [user?.user_address]);
+  }, [wallet]);
 
   return (
     <div className="min-h-[calc(100vh-140px)] bg-[#181A20] flex flex-col justify-center items-center">

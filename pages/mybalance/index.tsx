@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { fetchMyAIs } from "@/utils/api/ai";
 import { AIDetailProps } from "@/utils/interface";
-import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 import { Plus, PlusCircle } from "lucide-react";
 import avatarImage from "@/assets/avatar.png";
 
@@ -64,13 +64,13 @@ const AIBalanceCard: React.FC<AIBalanceCardProps> = ({
 const MyBalancePage = () => {
   const [myAIs, setMyAIs] = useState<AIDetailProps[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useUserStore();
+  const wallet = useWallet();
 
   useEffect(() => {
     const loadAIModels = async () => {
-      if (user?.user_address) {
+      if (wallet.address) {
         try {
-          const todayData = await fetchMyAIs(user.user_address);
+          const todayData = await fetchMyAIs(wallet.address);
           setMyAIs(todayData.ais);
           setIsLoading(false);
         } catch (error) {
@@ -80,13 +80,13 @@ const MyBalancePage = () => {
       }
     };
     loadAIModels();
-  }, [user?.user_address]);
+  }, [wallet.address]);
 
   if (isLoading) {
     return <div className="text-white">Loading...</div>;
   }
 
-  if (!user?.user_address) {
+  if (!wallet.address) {
     return (
       <div className="text-white">
         Please connect your wallet to view your balance.

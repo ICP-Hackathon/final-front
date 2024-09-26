@@ -5,6 +5,7 @@ import { UserRound } from "lucide-react";
 import { addUser } from "@/utils/api/user";
 import GenderSelect from "@/components/setprofile/GenderSelect";
 import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 import { User } from "@/utils/interface";
 import Image from "next/image";
 
@@ -17,9 +18,9 @@ const SetProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-  const { wallet, setUser } = useUserStore();
+  const wallet = useWallet();
 
-  console.log(wallet);
+  const setUser = useUserStore((state) => state.setUser);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value.replace(/\s+/g, "_");

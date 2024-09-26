@@ -6,7 +6,7 @@ import CategorySelector, {
 } from "@/components/explore/CategorySelector";
 import TodaySection from "@/components/explore/TodaySection";
 import RecentSection from "@/components/explore/RecentSection";
-import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 
 const categories: string[] = [
   "All",
@@ -27,12 +27,12 @@ export default function ExplorePage() {
   const [trendCards, setTrendCards] = useState<CardData[] | null>(null);
   console.log(trendCards);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useUserStore();
+  const wallet = useWallet();
   useEffect(() => {
     const loadAIModels = async () => {
-      if (user && user.user_address) {
+      if (wallet.address) {
         try {
-          const Todaydata = await fetchTodayAIs(user.user_address);
+          const Todaydata = await fetchTodayAIs(wallet.address);
           setTodayCards(Todaydata.ais);
           setIsLoading(false);
         } catch (error) {
@@ -46,18 +46,18 @@ export default function ExplorePage() {
 
   useEffect(() => {
     const loadAIModels = async () => {
-      if (user && user.user_address) {
+      if (wallet.address) {
         try {
           const Trenddata = await fetchTrendingAIs(
             selectedCategory,
-            user.user_address,
-            { offset: 0, limit: 10 }
+            wallet.address,
+            { offset: 0, limit: 10 },
           );
           setTrendCards(
             Trenddata.ais.sort(
               (a: CardData, b: CardData) =>
-                b.daily_user_access - a.daily_user_access
-            )
+                b.daily_user_access - a.daily_user_access,
+            ),
           );
         } catch (error) {
           console.error(error);

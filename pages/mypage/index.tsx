@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Pencil, ChevronRight, UserRound } from "lucide-react";
 import Link from "next/link";
 import avatarImage from "@/assets/avatar.png";
+import { useWallet } from "@suiet/wallet-kit";
 import { useUserStore } from "@/store/userStore";
 import { fetchUser } from "@/utils/api/user";
 import { fetchMyAIs } from "@/utils/api/ai";
@@ -61,11 +62,12 @@ const MyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user: storedUser, setUser } = useUserStore();
-  const { user } = useUserStore();
+  const wallet = useWallet();
+
   const loadUserData = async () => {
-    if (user && user.user_address) {
+    if (wallet.address) {
       try {
-        const userData = await fetchUser(user.user_address);
+        const userData = await fetchUser(wallet.address);
         console.log("Fetched User Data:", userData);
         setUser(userData);
         return userData;
@@ -77,9 +79,9 @@ const MyPage = () => {
   };
 
   const loadMyAIs = async () => {
-    if (user && user.user_address) {
+    if (wallet.address) {
       try {
-        const aisData = await fetchMyAIs(user.user_address);
+        const aisData = await fetchMyAIs(wallet.address);
         setMyAIs(aisData.ais);
       } catch (error) {
         console.error("Error fetching AI data:", error);
@@ -102,7 +104,7 @@ const MyPage = () => {
     };
 
     initializeData();
-  }, [user?.user_address]);
+  }, [wallet.address]);
 
   useEffect(() => {
     if (storedUser) {

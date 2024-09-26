@@ -3,7 +3,7 @@ import { fetchSearchAIs } from "@/utils/api/ai";
 import { SearchIcon } from "lucide-react";
 import { SetStateAction, useEffect, useState, useRef } from "react";
 import { CardData } from "@/utils/interface";
-import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 
 interface SearchProps {
   setSearch: React.Dispatch<React.SetStateAction<CardData[] | null>>;
@@ -17,7 +17,7 @@ const Search = ({ setSearch }: SearchProps) => {
   const [showSearch, setShowSearch] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null); // Ref for the search input
-  const { user } = useUserStore();
+  const wallet = useWallet();
 
   // Debouncing: 입력이 멈춘 후 500ms 동안 아무 변화가 없으면 debouncedQuery 업데이트
   useEffect(() => {
@@ -39,7 +39,7 @@ const Search = ({ setSearch }: SearchProps) => {
         try {
           const data = await fetchSearchAIs(
             debouncedQuery,
-            user?.user_address ? user.user_address : "",
+            wallet.address ? wallet.address : ""
           );
           if (data && data.ais) {
             setSearch(data.ais);

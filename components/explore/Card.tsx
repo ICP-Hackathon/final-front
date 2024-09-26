@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUserStore } from "@/store/userStore";
+import { useWallet } from "@suiet/wallet-kit";
 import { addLike, delLike } from "@/utils/api/user";
 import { Heart } from "lucide-react";
 
@@ -12,18 +12,18 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ name, category, ai_id, like }) => {
-  const { user } = useUserStore();
+  const wallet = useWallet();
   const [likes, setLikes] = useState(like);
 
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!user || !user.user_address) {
+    if (!wallet.address) {
       window.alert("Please log in to like AIs");
       return;
     }
 
     const userData = {
-      user_address: user.user_address,
+      user_address: wallet.address,
       ai_id: ai_id,
     };
 
@@ -39,6 +39,7 @@ const Card: React.FC<CardProps> = ({ name, category, ai_id, like }) => {
       window.alert("Failed to update like status");
     }
   };
+
 
   return (
     <div className="p-4 bg-[#1F222A] rounded-[16px] shadow-md relative flex flex-col">
