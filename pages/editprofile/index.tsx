@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import CountrySelect from "@/components/setprofile/CountrySelect";
@@ -19,15 +18,15 @@ const EditProfilePage = () => {
 
   const { user, setUser, wallet } = useUserStore();
 
-  console.log(user);
-
   useEffect(() => {
     if (user) {
       setGender(user.gender || "");
       setCountry(user.country || "");
       setInterest(user.interest || "");
       if (user.profile_image_url) {
-        const index = profileImages.findIndex((img) => img === user.profile_image_url);
+        const index = profileImages.findIndex(
+          (img) => img === user.profile_image_url,
+        );
         setSelectedProfile(index !== -1 ? index + 1 : 0);
       }
     }
@@ -67,27 +66,22 @@ const EditProfilePage = () => {
       router.push("/mypage");
     } catch (error) {
       setError("Failed to update profile. Please try again.");
-
       console.error("Error updating profile:", error);
-
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-[600px] min-h-screen bg-white flex flex-col px-6">
-      <div className="py-4 flex-shrink-0">
-        <div className="text-3xl text-gray-900 font-bold mb-4">
-          Edit your profile
-        </div>
-        <p className="text-lg text-gray-600 mb-8">
+    <div className="max-w-[600px] mx-auto flex flex-col text-white">
+      <div className="flex-shrink-0">
+        <p className="text-lg text-gray-400 mb-8">
           Update your profile information
         </p>
       </div>
 
       <div className="flex-grow overflow-y-auto pb-4">
-        <div className="size-32 bg-gray-200 rounded-full mb-4 mx-auto flex items-center justify-center overflow-hidden">
+        <div className="size-32 bg-[#2A2D36] rounded-full mb-4 mx-auto flex items-center justify-center overflow-hidden">
           {selectedProfile === 0 ? (
             <UserRound className="text-gray-400 size-24" />
           ) : (
@@ -106,7 +100,7 @@ const EditProfilePage = () => {
             <button
               key={index}
               onClick={() => setSelectedProfile(index + 1)}
-              className={`size-16 rounded-full overflow-hidden border-2 bg-gray-200 ${
+              className={`size-16 rounded-full overflow-hidden border-2 bg-[#2A2D36] ${
                 selectedProfile === index + 1
                   ? "border-primary-900"
                   : "border-transparent"
@@ -129,18 +123,18 @@ const EditProfilePage = () => {
 
           <div>
             <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              htmlFor="interest"
+              className="block text-sm font-medium text-gray-300 mb-1"
             >
-              Field of Intrest
+              Field of Interest
             </label>
             <div className="flex">
               <input
-                type="tel"
-                id="phone"
+                type="text"
+                id="interest"
                 value={interest}
                 onChange={(e) => setInterest(e.target.value)}
-                className="flex-1 p-2 border-b border-gray-300 focus:border-primary-900 focus:outline-none"
+                className="flex-1 p-2 border-b border-gray-600 focus:border-primary-900 focus:outline-none bg-transparent text-white"
                 placeholder="Education, Fitness, Blockchain etc..."
               />
             </div>
@@ -152,7 +146,7 @@ const EditProfilePage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary-900 text-white py-4 rounded-full font-medium disabled:bg-gray-400"
+              className="w-full bg-primary-900 text-white py-4 rounded-full font-medium disabled:bg-gray-600"
             >
               {isLoading ? "Updating Profile..." : "Update Profile"}
             </button>
@@ -164,3 +158,11 @@ const EditProfilePage = () => {
 };
 
 export default EditProfilePage;
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Edit Profile",
+    },
+  };
+}

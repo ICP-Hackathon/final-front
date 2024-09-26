@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Pencil, ChevronRight, UserRound } from "lucide-react";
 import Link from "next/link";
-
+import avatarImage from "@/assets/avatar.png";
 import { useUserStore } from "@/store/userStore";
 import { fetchUser } from "@/utils/api/user";
 import { fetchMyAIs } from "@/utils/api/ai";
@@ -23,29 +23,23 @@ const AICard: React.FC<AICardProps> = ({
   introductions,
 }) => {
   return (
-    <div className="bg-gray-50 border rounded-lg p-4 mb-4">
+    <div className="bg-[#2A2D36] rounded-lg p-4 mb-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          {profile_image_url ? (
-            <Image
-              src={profile_image_url}
-              alt={name}
-              width={60}
-              height={60}
-              className="rounded-full mr-4"
-            />
-          ) : (
-            <div className="size-[60px] rounded-full bg-emerald-100 mr-4 flex items-center justify-center">
-              <span className="text-emerald-500 font-bold text-lg">
-                {name.charAt(0).toUpperCase()}
+          <Image
+            src={profile_image_url || avatarImage}
+            alt={name}
+            width={48}
+            height={48}
+            className="rounded-full mr-3"
+          />
+          <div className="flex flex-col items-start">
+            <div>
+              <h3 className="text-lg">{name}</h3>
+              <span className="text-xs text-primary-900 px-2 rounded-full border border-primary-900">
+                {category}
               </span>
             </div>
-          )}
-          <div className="flex flex-col items-start">
-            <h3 className="font-semibold text-lg mb-1">{name}</h3>
-            <span className="text-sm rounded-full bg-primary-50 text-primary-900 px-3 py-1">
-              {category}
-            </span>
           </div>
         </div>
         <Link
@@ -131,7 +125,7 @@ const MyPage = () => {
     <div className="flex flex-col px-2">
       <div className="flex items-center justify-between pt-2 pb-4">
         <div className="flex items-center">
-          <div className="size-20 bg-gray-200 rounded-full mr-4 mx-auto flex items-center justify-center overflow-hidden">
+          <div className="size-20 bg-gray-500 rounded-full mr-4 mx-auto flex items-center justify-center overflow-hidden">
             {storedUser.profile_image_url ? (
               <img
                 src={storedUser.profile_image_url}
