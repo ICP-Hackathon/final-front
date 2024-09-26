@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { fetchMyAIs } from "@/utils/api/ai";
-import { AIModel, AIDetailProps } from "@/utils/interface";
+import { AIDetailProps } from "@/utils/interface";
 import { useUserStore } from "@/store/userStore";
+import { Plus, PlusCircle } from "lucide-react";
+import avatarImage from "@/assets/avatar.png";
 
 interface AIBalanceCardProps {
   name: string;
@@ -12,7 +14,7 @@ interface AIBalanceCardProps {
   earnings: number;
 }
 
-export const AIBalanceCard: React.FC<AIBalanceCardProps> = ({
+const AIBalanceCard: React.FC<AIBalanceCardProps> = ({
   name,
   category,
   imageSrc,
@@ -20,46 +22,34 @@ export const AIBalanceCard: React.FC<AIBalanceCardProps> = ({
   earnings,
 }) => {
   return (
-    <div className="bg-gray-50 border rounded-lg p-4 mb-4">
-      <div className="flex flex-col">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            {imageSrc ? (
-              <Image
-                src={imageSrc}
-                alt={name}
-                width={60}
-                height={60}
-                className="rounded-full mr-4"
-              />
-            ) : (
-              <div className="size-[60px] rounded-full bg-emerald-100 mr-4 flex items-center justify-center">
-                <span className="text-emerald-500 font-bold text-lg">
-                  {name.charAt(0).toUpperCase()}
-                </span>
-              </div>
-            )}
-            <div className="flex flex-col items-start">
-              <h3 className="font-semibold text-lg mb-1">{name}</h3>
-              <span className="text-sm rounded-full bg-primary-50 text-primary-900 px-3 py-1">
-                {category}
-              </span>
-            </div>
-          </div>
-          <button className="text-primary-900 font-medium text-lg flex items-center">
-            Collect
-          </button>
-        </div>
+    <div className="bg-[#2A2D36] rounded-xl p-4 mb-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <Image
+            src={imageSrc || avatarImage}
+            alt={name}
+            width={48}
+            height={48}
+            className="rounded-full mr-3"
+          />
 
-        <div className="flex mt-4 divide-x divide-gray-300">
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <p className="text-sm text-gray-500">Usage</p>
-            <p className="text-lg font-semibold">{usage} tokens</p>
+          <div>
+            <h3 className="text-lg">{name}</h3>
+            <span className="text-xs text-primary-900 px-2 rounded-full border border-primary-900">
+              {category}
+            </span>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <p className="text-sm text-gray-500">Earnings</p>
-            <p className="text-lg font-semibold">$ {earnings.toFixed(2)}</p>
-          </div>
+        </div>
+        <button className="text-primary-900 font-medium">Collect</button>
+      </div>
+      <div className="flex mt-4 divide-x divide-gray-300">
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <p className="text-sm text-gray-500">Usage</p>
+          <p className="text-lg">{usage} tokens</p>
+        </div>
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <p className="text-sm text-gray-500">Earnings</p>
+          <p className="text-lg">$ {earnings.toFixed(2)}</p>
         </div>
       </div>
     </div>
@@ -70,9 +60,10 @@ const MyBalancePage = () => {
   const [myAIs, setMyAIs] = useState<AIDetailProps[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUserStore();
+
   useEffect(() => {
     const loadAIModels = async () => {
-      if (user && user.user_address) {
+      if (user?.user_address) {
         try {
           const todayData = await fetchMyAIs(user.user_address);
           setMyAIs(todayData.ais);
@@ -86,39 +77,48 @@ const MyBalancePage = () => {
     loadAIModels();
   }, [user?.user_address]);
 
-  console.log(myAIs);
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-white">Loading...</div>;
   }
 
   if (!user?.user_address) {
-    return <div>Please connect your wallet to view your balance.</div>;
+    return (
+      <div className="text-white">
+        Please connect your wallet to view your balance.
+      </div>
+    );
   }
 
   const totalEarnings =
     myAIs?.reduce((sum, ai) => sum + ai.total_token_usage * 0.01, 0) || 0;
+  const totalBalance = 437000; // This should be fetched from an API or calculated
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <div className="bg-primary-900 text-white p-4 rounded-xl mb-6">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col items-start border-r pr-2">
-            <h2 className="text-xl font-semibold mr-2 mb-1">My Balance</h2>
-            <span className="bg-white text-primary-900 px-4 rounded-full text-sm">
-              {myAIs?.length || 0} AIs
-            </span>
+      <div className="bg-primary-900 bg-opacity-[42%] rounded-xl p-4 mb-6 text-center">
+        <div className="flex justify-between mb-4">
+          <div className="flex-1 pr-2 ">
+            <p className="text-[#B9F0DE] text-sm mb-1">My Balance</p>
+            <p className="text-white text-2xl font-bold">
+              $ {totalBalance.toLocaleString()}
+            </p>
           </div>
-          <div className="items-center mx-auto">
-            <p className="text-sm text-center">Earnings</p>
-            <p className="text-2xl font-semibold">
-              $ {totalEarnings.toFixed(2)}
+          <div className="w-px bg-[#B9F0DE] self-stretch mx-2"></div>
+          <div className="flex-1 pl-2">
+            <p className="text-[#B9F0DE] text-sm mb-1">Earnings</p>
+            <p className="text-white text-2xl font-bold">
+              $ {totalEarnings.toLocaleString()}
             </p>
           </div>
         </div>
+        <button className="w-full bg-primary-900 text-white py-1 rounded-full font-semibold flex items-center justify-center">
+          <Plus className="mr-2" /> Charge
+        </button>
       </div>
 
-      <h2 className="text-xl font-semibold mb-4">Overview of AIs</h2>
+      <h2 className="text-white text-xl font-semibold mb-4">
+        Overview of My Creations
+      </h2>
       {myAIs?.map((ai) => (
         <AIBalanceCard
           key={ai.id}
