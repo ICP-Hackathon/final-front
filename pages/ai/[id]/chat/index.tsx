@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Message, ChatResponse } from "@/utils/interface";
 import { createChat, fetchChatHistory, sendMessage } from "@/utils/api/chat";
 import { Send } from "lucide-react";
-import Logo from "@/assets/logo_apptos.svg";
+import Logo from "@/assets/logo_suietail.svg";
 import { useWallet } from "@suiet/wallet-kit";
 import { fetchAIDetails } from "@/utils/api/ai";
 

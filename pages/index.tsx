@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "@/assets/logo_apptos.svg";
+import Logo from "@/assets/logo_suietail.svg";
 import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import WalletButton from "@/components/wallet/WalletButton";

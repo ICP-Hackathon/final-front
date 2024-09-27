@@ -28,9 +28,9 @@ const SetProfilePage = () => {
   };
 
   const profileImages = [
-    "https://apptos.s3.ap-southeast-2.amazonaws.com/1.png",
-    "https://apptos.s3.ap-southeast-2.amazonaws.com/2.png",
-    "https://apptos.s3.ap-southeast-2.amazonaws.com/3.png",
+    "https://suietail.s3.ap-southeast-2.amazonaws.com/1.png",
+    "https://suietail.s3.ap-southeast-2.amazonaws.com/2.png",
+    "https://suietail.s3.ap-southeast-2.amazonaws.com/3.png",
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
