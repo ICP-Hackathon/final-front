@@ -11,7 +11,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "apptos.s3.ap-southeast-2.amazonaws.com",
+        hostname: "suietail.s3.ap-southeast-2.amazonaws.com",
         port: "", // Leave this empty if you're not using a specific port
         pathname: "/**", // This allows all images from the host
       },

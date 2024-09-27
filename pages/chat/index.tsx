@@ -207,7 +207,7 @@ export default ChatPage;
 export async function getStaticProps() {
   return {
     props: {
-      title: "ApptoS Chat",
+      title: "SuieTail Chat",
     },
   };
 }
